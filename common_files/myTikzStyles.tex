@@ -1,0 +1,67 @@
+\tikzset{nodeStyleGreen/.style={
+    draw=green!40!black,
+    fill=green!50!lime!30,
+    align=left,
+    thick,
+    rounded corners
+}}
+
+\tikzset{nodeStyleKUdb/.style={
+    set fill color=KUlb!50!KUdb!10,
+    set border color=KUlb!40!black,
+    align=left,
+    thick,
+    rounded corners
+}}
+
+\tikzset{nodeStyleRed/.style={
+    draw=red!40!black,
+    fill=red!50!lime!30,
+    align=left,
+    thick,
+    rounded corners
+}}
+
+\tikzset{nodeStyleBlue/.style={
+    draw=blue!40!black,
+    fill=blue!50!lime!30,
+    align=left,
+    thick,
+    rounded corners
+}}
+
+\tikzset{lineStyleRed/.style={
+    color=red!40!black,opacity=0.75,line width=1pt,
+}}
+
+\tikzset{lineStyleGreen/.style={
+    color=green!40!black,opacity=0.75,line width=1pt,
+}}
+
+\tikzset{lineStyleKUdb/.style={
+    color=KUlb!40!black,opacity=0.75,draw,line width=1pt,
+}}
+
+\tikzset{lineStyleBlue/.style={
+    color=blue!40!black,opacity=0.75,line width=1pt,
+}}
+
+
+\tikzstyle{vectArrow} = [thick, decoration={markings,mark=at position
+   0.999 with {\arrow[semithick]{open triangle 60}}},
+   double distance=1.4pt, shorten >= 5.5pt,
+   preaction = {decorate},
+   postaction = {draw,line width=1.4pt, white,shorten >= 4.5pt}]
+
+
+% Define shape example
+\tikzset{
+  every plot/.style={prefix=plots/pgf-},
+  shape example/.style={
+    color=black!30,
+    draw,
+    fill=yellow!30,
+    line width=.5cm,
+    inner xsep=2.5cm,
+    inner ysep=0.5cm},
+}

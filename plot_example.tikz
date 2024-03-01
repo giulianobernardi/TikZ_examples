@@ -1,0 +1,51 @@
+% -*- root: ./main_tikz.tex -*-
+%
+\begin{tikzpicture}
+
+
+%
+%%
+%\definecolor{mycolor1}{HTML}{D7191C}%
+%\definecolor{mycolor2}{HTML}{FDAE61}%
+%\definecolor{mycolor3}{HTML}{ABDDA4}%
+%\definecolor{mycolor4}{HTML}{2B83BA}%
+%%
+%%
+%\definecolor{mycolor1}{cmyk}{10,60,100,0}%
+%\definecolor{mycolor2}{cmyk}{0,28,55,0}%
+%\definecolor{mycolor3}{cmyk}{30,25,0,0}%
+%\definecolor{mycolor4}{cmyk}{65,70,0,0}%
+%%
+\definecolor{mycolor1}{HTML}{E66101}%
+\definecolor{mycolor2}{HTML}{FDB813}%
+\definecolor{mycolor3}{HTML}{B2ABD2}%
+\definecolor{mycolor4}{HTML}{5E3C99}%
+%
+\begin{axis}[
+xtick={-6,...,-3},
+%xticklabels={{$-6$},{},{$a$},{$a$},{$b$}},
+%xticklabel style = {yshift=+0.05cm},
+%xticklabels={\tiny \rotatebox{30}{{$O_{SNR}$}},\tiny \rotatebox{30}{{$S_{SNR}$}}},
+legend style={at={(0.99,0.99)},legend columns=2,anchor=north east,fill=none,draw=none,legend cell align=left},
+legend entries={FDAF,
+                PEM-FDAF,
+                KFDAF,
+                PEM-KFDAF}
+]
+\addlegendimage{color=mycolor1,solid,line width=1.0pt,mark=asterisk}
+\addlegendimage{color=mycolor2,solid,line width=1.0pt,mark=diamond}
+\addlegendimage{color=mycolor3,solid,line width=1.0pt,mark=triangle,mark options={solid,rotate=180}}
+\addlegendimage{color=mycolor4,solid,line width=1.0pt,mark=triangle,mark options={solid,rotate=90}}
+%\addplot [mycolor1, only marks] {-5+10*rnd};
+%\addplot [mycolor2,line width=2.0pt] {10*sin(100*x)};
+\addplot [mycolor3,line width=2.0pt] {x};
+%\addplot [mycolor4,line width=2.0pt] {-x};
+
+\addplot+[name path=A,black,no markers] {-x};
+\addplot+[name path=B,black,no markers] {-2*x)};
+
+\addplot[black,opacity=0.1,] fill between[of=A and B];
+
+\end{axis}
+
+\end{tikzpicture}

@@ -1,0 +1,17 @@
+% -*- root: ./main_tikz.tex -*-
+%
+
+\begin{tikzpicture}
+\begin{axis}
+\addplot3[
+    surf,
+] 
+coordinates {
+(0,0,0) (0,1,0) (0,2,0)
+ 
+(1,0,0) (1,1,0.6) (1,2,0.7)
+ 
+(2,0,0) (2,1,0.7) (2,2,1.8)
+};
+\end{axis}
+\end{tikzpicture}

@@ -1,0 +1,92 @@
+% -*- root: ./main_tikz.tex -*-
+
+\newcommand{\xdim}{8}
+\newcommand{\ydim}{9}
+\newcommand{\myshift}{11}
+\newcommand{\myscale}{0.25}
+\newcommand{\mytextscale}{1}
+\begin{tikzpicture}
+	% Local room
+	\draw[line width=1pt, dashed] (-1,0) -- (-1,\ydim)  -- (-1+\xdim*1.125,\ydim) -- (-1+\xdim*1.125,0) -- cycle;
+	\node[scale=1,anchor=north east] (lr) at (\xdim*1.125-1,\ydim-0.0) {\Large Local room};
+	% Remote room
+	\draw[line width=1pt,dashed] (0+\myshift,0) -- (0+\myshift,\ydim)  -- (\xdim*0.75+\myshift,\ydim) -- (\xdim*0.75+\myshift,0) -- cycle;
+	\node[scale=1,anchor=north west] (rr) at (\myshift+0.05,\ydim-0.0) {\Large Remote room};	
+	% Nodes
+	% L1
+	\node[scale=\myscale] (l1) at (2,2) {\includegraphics{laptopIcon.pdf}};
+	\node[scale=\mytextscale,font=\bfseries,KUt1] (labdl1) at ($(l1.north)+(0.0cm,0.15)$) {$D_{L1}$};
+	\coordinate (lscoord_l1) at ($(l1)+(0.9cm,0.15)$);	\pic[rotate=90,scale=0.5,very thick] (ls_l1) at (lscoord_l1) {Speaker={KUt1}{gray!40}};
+	\coordinate (miccoord_l1) at ($(l1)+(-0.8cm,0.15)$); \pic[scale=0.75,rotate=180,,very thick] (mic_l1) at (miccoord_l1) {Mic={KUt1}{gray!40}};
+	%L2
+	\node[scale=\myscale] (l2) at (2,7) {\includegraphics{laptopIcon.pdf}};
+	\node[scale=\mytextscale,font=\bfseries,KUt1] (labdl2) at ($(l2.north)+(0.0cm,0.15)$) {$D_{L2}$};
+	\coordinate (lscoord_l2) at ($(l2)+(0.9cm,0.15)$);	\pic[rotate=90,scale=0.5,very thick] (ls_l2) at (lscoord_l2) {Speaker={KUt1}{gray!40}};
+	\coordinate (miccoord_l2) at ($(l2)+(-0.8cm,0.15)$); \pic[scale=0.75,rotate=180,very thick] (mic_l2) at (miccoord_l2) {Mic={KUt1}{gray!40}};
+	%L3
+	\node[scale=\myscale] (l3) at (4.5,4.895) {\smartphoneIcon{0.4}{KUt1}};
+	\node[scale=\mytextscale,font=\bfseries,KUt1] (labdl3) at ($(l3.north)+(0.0cm,0.175)$) {$D_{L3}$};
+	\node[scale=\mytextscale,font=\bfseries,KUt1] (labl3a) at (l3) {};
+	\coordinate (lscoord_l3) at ($(l3)+(0.9cm,0.15)$);	%\pic[rotate=90,scale=0.5,very thick] (ls_l2) at (lscoord_l3) {Speaker={KUt1}{gray!40}};
+	\coordinate (miccoord_l3) at ($(l3)+(-0.8cm,0.15)$); %\pic[scale=0.75,rotate=180,very thick] (mic_l2) at (miccoord_l3) {Mic={KUt1}{gray!40}};	
+	
+
+
+	% R1	
+	\node[scale=\myscale] (r1) at (14.9,3.5) {\includegraphics{laptopIcon.pdf}};
+	\node[scale=\mytextscale,KUt1] (labdr1) at ($(r1.north)+(0.0cm,0.15)$) {$D_{R1}$};
+	\coordinate (lscoord_r1) at ($(r1)+(0.9cm,0.15)$); \pic[rotate=90,scale=0.5,very thick] (ls_r1) at (lscoord_r1) {Speaker={KUt1}{gray!40}};
+	\coordinate (miccoord_r1) at ($(r1)+(-0.8cm,0.15)$); \pic[scale=0.75,rotate=180,very thick] (mic_r1) at (miccoord_r1) {Mic={KUt1}{gray!40}};	
+	
+	% WWW	
+	\node[anchor=center,align=center,scale=0.13] (int1) at (\xdim+1.5,\ydim/2) {\wwwIcon{0.95}{KUt1}};
+	
+	% APs
+	\node[anchor=center,align=center,scale=0.13] (lAP) at (\xdim-1,\ydim/2+0.28) {\APIcon{0.5}{KUt1}};
+	\node[anchor=center,align=center,scale=0.13] (rAP) at (\xdim+4,\ydim/2+0.28) {\APIcon{0.5}{KUt1}};
+	
+	% Noise
+	\coordinate (noisecoord) at ($(l1)!0.5!(l2)+(-2.25cm,0)$); \pic[rotate=90,scale=0.85,very thick] (noise) at (noisecoord) {Speaker={KUt1}{gray!40}};
+        \coordinate (c3) at ($(noisecoord)+(0.05cm,0cm)$);
+        \path [snake=expanding waves, thick,segment length=1mm, segment angle=40, postaction={draw},KUt1,very thick]
+                    (c3) to ($(c3)+(0.5,0.0)$);
+	
+	% % Cross devices
+	% \draw[line width=1pt,KUor,dashed, very thick,looseness=1.75,-latex] (ls_l1-front) to[in=200,out=0] node[xshift=0.35cm,pos=0.4]{$F_{L1}$} ($(mic_l2-back)+(0,-0.1cm)$);
+	% \draw[line width=1pt,KUor,dashed, very thick,looseness=1.75,-latex] (ls_l2-front) to[in=180,out=0] node[xshift=0.35cm,pos=0.4]{$F_{L2}$} (mic_l1-back);
+	
+	% % Intra devices
+	% \draw[line width=1pt,green,dashed, very thick,looseness=3.0,-latex] (ls_l1-front) to[in=140,out=40] node[yshift=0.25cm]{$E_{L1}$} ($(mic_l1-back)+(0,0.1cm)$);
+	% \draw[line width=1pt,green,dashed, very thick,looseness=3.0,-latex] (ls_l2-front) to[in=140,out=40] node[yshift=0.25cm]{$E_{L2}$} ($(mic_l2-back)+(0,0.1cm)$);
+	% \draw[line width=1pt,green,dashed, very thick,looseness=3.0,-latex] (ls_r1-front) to[in=140,out=40] node[yshift=0.25cm]{$E_{R1}$} (mic_r1-back);
+	
+	% % Noise
+	% \draw[line width=1pt,black,dashed, very thick,looseness=1.75,-latex] ($(c3)+(0.55,0.0)$) to[in=-140,out=-70] node[xshift=0.35cm,pos=0.2]{$N_{L1}$} ($(mic_l1-back)+(0,-0.1cm)$);
+	% \draw[line width=1pt,black,dashed, very thick,looseness=1.75,-latex] ($(c3)+(0.55,0.0)$) to[in=-180,out=70] node[xshift=0.35cm,pos=0.2]{$N_{L2}$} (mic_l2-back);
+	
+	
+	% Edges
+	%\foreach \ind in {1,2} \draw[line width=1pt,KUt1,dashed, very thick] (l\ind) -- (r1);
+	\draw[line width=1pt,KUt1,densely dashed, very thick,latex-latex] ($(l1.east)+(0cm,-0.5)$) -| node[yshift=-0.25cm]{$W_{L1}$} ($(lAP.west)+(0.5cm,-0.5)$);
+	\draw[line width=1pt,KUt1,densely dashed, very thick,latex-latex] ($(l2.east)+(0cm,-0.25)$) -| node[yshift=0.25cm]{$W_{L2}$} ($(lAP.west)+(0.5cm,+0.5)$);
+	\draw[line width=1pt,KUt1,densely dashed, very thick,latex-latex] ($(l3.east)+(0cm,-0.5)$) -- node[yshift=-0.25cm]{$W_{L3}$} ($(lAP.west)+(0.0cm,-0.25)$);
+	
+	\draw[line width=1pt,KUt1,densely dashed,very thick,latex-latex] ($(rAP.south)+(0cm,-0.0)$) |- node[yshift=-0.25cm]{$W_{R1}$} ($(r1.west)+(0cm,-0.5)$);
+	\draw[line width=1pt,KUt1,very thick,latex-latex] ($(lAP.west)+(1cm,-0.3)$) -- ($(int1.west)+(0.0cm,+0.0)$);
+	\draw[line width=1pt,KUt1,very thick,latex-latex] ($(rAP.east)+(-1cm,-0.3)$) -- ($(int1.east)+(0.0cm,+0.0)$);
+	%\draw[line width=1pt,KUt1,densely dashed, very thick,latex-latex] ($(l1.east)+(0cm,-0.5)$) -| ($(r1)+(-2cm,-1.5)$) |- ($(r1.west)+(0cm,-0.5)$);
+	%\draw[line width=1pt,KUt1,densely dashed, very thick,latex-latex] ($(l2.east)+(0cm,-0.25)$) -| ($(r1)+(-2cm,1.5)$) |- ($(r1.west)+(0cm,-0.25)$);
+	%\draw[line width=1pt,KUt1,densely dashed, very thick,latex-latex] ($(l2.east)+(0cm,-0.5)$) -| ($(l1)!0.5!(l2)+(2.5cm,0)$) |- ($(l1.east)+(0cm,-0.25)$);
+	
+	
+	%\coordinate (hcoord_l2) at ($(l2)+(-0.8cm,0.15)$); \pic[scale=0.75,rotate=180] (h_l2) at (hcoord_l2) {Human={skin}{brown!85!black}};
+	\pic[rotate=90,scale=0.65] at ($(l3)+(0.cm,-1.45)$) {Human={brown}{pink!85!black}};
+	\pic[rotate=90,scale=0.65] at ($(l2)+(0.cm,-1.35)$) {Human={skin}{yellow!65!black}};
+	\pic[rotate=90,scale=0.65] at ($(l1)+(0.cm,-1.35)$) {Human={skin}{brown!85!black}};
+	\pic[rotate=90,scale=0.65] at ($(r1)+(0.cm,-1.35)$) {Human={brown}{black}};
+	
+	% Edges local
+	%\draw[line width=1pt,KUor,dashed, very thick] (l1) -- (l2);
+	%\draw[line width=1pt,KUor,dashed, very thick] (l1) -- (l3);
+	%\draw[line width=1pt,KUor,dashed, very thick] (l3) -- (l2);
+\end{tikzpicture}

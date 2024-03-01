@@ -1,0 +1,170 @@
+% Definition of signal macros
+%%---------------------------------------------------------------
+% ------------- SCHEME macros
+% Error signal
+\newcommand{\myerrsig}{d}
+% White excitation
+\newcommand{\myexcsig}{e}
+% Prefiltered quantities
+\newcommand{\mypref}[1]{
+    #1^{a}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+% Inverse notation for H
+\newcommand{\myHinv}[1]{
+    #1^{-1}
+}
+% Inverse notation for H (uppercase)
+\newcommand{\myHinvup}{
+    \hat{A}
+}
+% Inverse notation for H (lowercase)
+\newcommand{\myHinvlow}{
+    \hat{a}
+}
+% Inverse notation for H: hermitian transposition
+\newcommand{\myHinvherm}[1]{
+    #1^{-\mathrm{H}}
+}
+% Order of H
+\newcommand{\mypreforder}{
+    n_{H}
+}
+
+% Vector notation (works for both greek and latin letters)
+\newcommand{\vect}[1]{\mathbf{#1}}
+\newcommand{\vectW}[1]{\boldsymbol{#1}}
+% Multichannel vector
+\newcommand{\multivect}[1]{\overline{\vect{#1}}}
+
+% Prediction error signal TD
+\newcommand{\myprederrsigTD}{\varepsilon}
+%{\mypref{\myerrsig}}
+% Prediction error signal FD
+\newcommand{\myprederrsigFD}{\mathcal{E}}
+%%---------------------------------------------------------------
+
+% Toeplitz U matrix
+\newcommand{\myToepLS}{\mathbfcal{U}}
+
+% ----------------------------
+% Variable # of arguments
+% ----------------------------
+% One matrix
+\NewDocumentCommand\One{m+g}{%
+  \IfNoValueTF{#2}
+    {\vect{1}_{#1}}
+    {\vect{1}_{#1 \times #2}}%
+}
+% Zero matrix
+\NewDocumentCommand\Zero{m+g}{%
+  \IfNoValueTF{#2}
+    {\vect{0}_{#1}}
+    {\vect{0}_{#1 \times #2}}%
+}
+% Identity matrix
+\NewDocumentCommand\Eye{m+g}{%
+  \IfNoValueTF{#2}
+    {\vect{I}_{#1}}
+    {\vect{I}_{#1 \times #2}}%
+}
+% Fourier matrix
+\NewDocumentCommand\Fm{m+g}{%
+  \IfNoValueTF{#2}
+    {\vect{F}_{#1}\,}
+    {\vect{F}_{#1 \times #2}\,}%
+}
+% Inverse Fourier matrix
+\NewDocumentCommand\FmInv{m+g}{%
+  \IfNoValueTF{#2}
+    {\vect{F}^{-1}_{#1}\,}
+    {\vect{F}^{-1}_{#1 \times #2}}%
+}
+
+% W's
+\NewDocumentCommand\Wm{m+m+m+g}{%
+  \IfNoValueTF{#4}
+    {\vect{W}_{#2 \times #3}^{#1}\,}
+    {\vect{W}_{#2 \times #3|#4}^{#1}}%
+}
+%\newcommand{\Wm}[4]{\vect{W}_{#2 \times #3|#4}^{#1}}
+
+% G's
+\NewDocumentCommand\Gm{m+m+m+g}{%
+  \IfNoValueTF{#4}
+    {\vect{G}_{#2 \times #3}^{#1}\,}
+    {\vect{G}_{#2 \times #3|#4}^{#1}}%
+}
+%\newcommand{\Gm}[3]{\vect{G}_{#2 \times #3}^{#1}}
+
+% Transposition
+\newcommand{\transp}{\mathrm{T}}
+\newcommand{\hermit}{\mathrm{H}}
+\newcommand{\circul}{\mathrm{C}}
+
+
+% Lengths
+% Time-frame shift
+\newcommand{\TFshift}{\ensuremath{R}}
+% Time-frame length
+\newcommand{\TFlen}{\ensuremath{M}}
+% Partition length
+\newcommand{\PBlen}{\ensuremath{L}}
+% Signal-block length
+\newcommand{\SBlen}{\ensuremath{V}}
+% Time-domain index
+\newcommand{\TDind}{\ensuremath{t}}
+% Frequency-domain index
+\newcommand{\FDind}{\ensuremath{l}}
+% Time-frame index
+\newcommand{\TFind}{\ensuremath{\kappa}}
+% Partition index
+\newcommand{\PBind}{\ensuremath{p}}
+% Number of partitions
+\newcommand{\PBnum}{\ensuremath{P}}
+% Order of the SSM
+\newcommand{\ssorder}{\ensuremath{n_{H}}}
+% Order of the inverse SSM
+\newcommand{\ssinvorder}{\ensuremath{n_{J}}}
+% Order of the inverse SSM
+\newcommand{\pemparorder}{\ensuremath{n_{\pempar}}}
+% Order of the prefilter
+\newcommand{\preforder}{\ensuremath{n_{\hat{H}}}}
+% Order of F
+\newcommand{\fporder}{\ensuremath{n_{F}}}
+% Overlap factor
+\newcommand{\OVfac}{\ensuremath{\gamma}}
+% Transition factor Kalman filter
+\newcommand{\TRANSfac}{\ensuremath{\alpha}}
+
+% Divider in bmatrix
+\makeatletter
+\renewcommand*\env@matrix[1][*\c@MaxMatrixCols c]{%
+  \hskip -\arraycolsep
+  \let\@ifnextchar\new@ifnextchar
+  \array{#1}}
+\makeatother
+
+% Style to select only points from #1 to #2 (inclusive)
+\pgfplotsset{select coords between index/.style 2 args={
+		x filter/.code={
+			\ifnum\coordindex<#1\def\pgfmathresult{}\fi
+			\ifnum\coordindex>#2\def\pgfmathresult{}\fi
+		}
+}}
+
+
+
+\newcommand{\hlmprwn}{\ensuremath{\widetilde{\mathbf{h}}^{\mathbf{wn}}_{\mathbf{a}}}}
+\newcommand{\hlmprdp}{\ensuremath{\widetilde{\mathbf{h}}^{\mathbf{dp}}_{\mathbf{a}}}}

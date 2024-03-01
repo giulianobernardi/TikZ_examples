@@ -1,0 +1,48 @@
+%%---------------------------------------------------------------
+
+%Custom legend
+
+% argument #1: any options
+\newenvironment{customlegend}[1][]{%
+    \begingroup
+    % inits/clears the lists (which might be populated from previous
+    % axes):
+    \csname pgfplots@init@cleared@structures\endcsname
+    \pgfplotsset{#1}%
+}{%
+    % draws the legend:
+    \csname pgfplots@createlegend\endcsname
+    \endgroup
+}%
+
+% makes \addlegendimage available (typically only available within an
+% axis environment):
+\def\addlegendimage{\csname pgfplots@addlegendimage\endcsname}
+
+
+%%---------------------------------------------------------------
+
+% Beamer commands
+
+%\newcommand{\tms}[3]{\tikzmarkin[#3]{#1}#2\tikzmarkend{#1}}
+\newcommand{\tms}[4]{\tikzmarkin[#4,label=#1]{#2}#3\tikzmarkend{#2}}
+\newcommand{\only}[1]{\label{#1}}
+
+
+% Preamble for mindmaps
+\tikzset{grow cyclic absolute/.style={%
+  growth function=\tikzgrowcyclicabsolute}}
+\def\tikzgrowcyclicabsolute{%
+  \pgftransformshift{%
+   \pgfpointpolar{\pgfkeysvalueof{/tikz/sibling angle}}%
+    {\the\tikzleveldistance}}}
+
+\tikzset{grow cyclic list/.code={%
+  \def\tikzgrowthpositions{{#1}}%
+  \foreach \n [count=\i,remember=\i]in {#1}{}%
+  \let\tikzgrowthpositionscount=\i%
+  \tikzset{growth function=\tikzgrowcycliclist}}}
+\def\tikzgrowcycliclist{%
+  \pgftransformshift{%
+    \pgfpointpolar{\tikzgrowthpositions[mod(\the\tikznumberofcurrentchild-1,\tikzgrowthpositionscount)]}%
+      {\the\tikzleveldistance}}}

@@ -1,0 +1,51 @@
+% -*- root: ./main_tikz.tex -*-
+%
+\begin{tikzpicture}[node distance=55pt, auto,>=latex, thick,font=\LARGE]
+% Grid
+\foreach \x in {0,3,6} \draw (0,0) ++(\x,0) -- +(0,12);
+\foreach \x in {9} \draw (0,0) ++(\x,6) -- +(0,6);
+\foreach \y in {6,8,...,12} \draw (0,0) ++(6,\y) -- +(3,0);
+\foreach \y in {0,2,...,12} \draw (0,0) ++(0,\y) -- +(6,0);
+% Type of Hearing loss
+\node[align=center] at (4.5,13.5) {Type of hearing loss};
+\node[align=center] at (1.5,12.5) {Sensorineural};
+\node[align=center] at (4.5,12.5) {Mixed};
+\node[align=center] at (7.5,12.5) {Conductive};
+% Degree of Hearing loss
+\node[align=center] at (-0.5,12) {0};
+\node[align=center] at (-0.5,10) {20};
+\node[align=center] at (-0.5,8) {40};
+\node[align=center] at (-0.5,6) {60};
+\node[align=center] at (-0.5,4) {80};
+\node[align=center] at (-0.5,2) {100};
+\node[align=center] at (-0.5,0) {120};
+% Degree of Hearing loss labels
+\node[align=center] at (-2.75,9) {Mild};
+\node[align=center] at (-2.75,7) {Moderate};
+\node[align=center] at (-2.75,5) {Moderately\\severe};
+\node[align=center] at (-2.75,3.5) {Severe};
+\node[align=center] at (-2.75,2) {Profound};
+\node[align=center] at (-2.75,1) {Deaf};
+\node[align=center,rotate=90] at (-5,6) {Degree of hearing loss (dB HL)};
+
+% Shadings
+\draw[draw=none,red,fill,opacity=0.5] (0,0) ++ (0.2,0.1) -- +(5.7,0) to [out=120,in=0] (0.2,2.75) -- cycle;
+\draw[draw=none,green,fill,opacity=0.5] (0,0) ++ (0.1,2.2) -- +(0,7.5) -- +(2.8,7.5) to [out=270,in=30]  cycle;
+\draw[draw=none,pink,fill,opacity=0.85] (0,0) ++ (4.5,9.5) -- +(4.3,0) -- +(4.3,-3.3) to [out=180,in=290]  cycle ;
+\draw[draw=none,gray,fill,opacity=0.5] (0,0) ++ (6.05,9.75) -- +(2.8,0) -- +(2.8,-3.7) to [out=180,in=270]  cycle;
+\draw[draw=none,yellow,fill,opacity=0.5] (0,0)  (4.5,4.25) ellipse (1.35 and 2.15);
+
+% CI
+\draw (0,0) ++ (0.2,0.1) -- +(5.7,0) to [out=120,in=0] (0.2,2.75) -- cycle node[yshift=1.25cm,xshift=1.5cm] {\LARGE\bfseries CI};
+% MEI
+\draw (0,0) ++ (0.1,2.2) -- +(0,7.5) -- +(2.8,7.5) to [out=270,in=30]  cycle node[yshift=4.75cm,xshift=1.25cm] {\LARGE\bfseries MEI};
+% HA
+\draw (0,0) ++ (0.2,3.2) -- +(0,6.25) -- +(4.8,6.25) to [out=270,in=30]  cycle node[yshift=4.15cm,xshift=3.5cm] {\LARGE\bfseries HA};
+% BAHA
+\draw (0,0) ++ (4.5,9.5) -- +(4.3,0) -- +(4.3,-3.3) to [out=180,in=290]  cycle ;
+\draw [red,decoration={text along path,text color=black,text={|\LARGE\bfseries|BAHA},text align={center},raise=8pt},decorate] ($(0,0) + (4.5,9.2)$) to [out=180,in=290] ($(0,0) + (9,6.2)$);
+% MES
+\draw (0,0) ++ (6.05,9.75) -- +(2.8,0) -- +(2.8,-3.7) to [out=180,in=270]  cycle node[yshift=-1cm,xshift=1.5cm] {\LARGE\bfseries MES};
+% DACI
+\draw (0,0)  (4.5,4.25) ellipse (1.35 and 2.15) node {\LARGE\bfseries DACI};
+\end{tikzpicture}

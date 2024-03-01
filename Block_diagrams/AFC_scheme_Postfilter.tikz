@@ -1,0 +1,99 @@
+% -*- root: ../main_tikz.tex -*-
+%
+
+% Block diagram for adaptive feedback cancellation:
+% PEM
+
+\tikzset{
+Speaker/.pic={
+    \filldraw[fill=gray!40,pic actions] 
+    (-15pt,0) -- 
+      coordinate[midway] (-front) 
+    (15pt,0) -- 
+    ++([shift={(-6pt,8pt)}]0pt,0pt) coordinate (aux1) -- 
+    ++(-18pt,0) coordinate (aux2) 
+    -- cycle 
+    (aux1) -- ++(0,6pt) -- coordinate[midway] (-back) ++(-18pt,0) -- (aux2);
+  }
+}
+
+\begin{tikzpicture}
+%%%%%%%%%%%%%%%%%%%%%%%
+% Blocks and nodes
+%%%%%%%%%%%%%%%%%%%%%%%
+
+%------- Source signal ---------
+\node[dspnodeopen,dsp/label=below] 
+  (ns) {$v(t)$}; 
+  
+%------- Mic symbol ---------  
+\node[left=of ns,fill=gray!40,circle,minimum size=0.35cm,draw] 
+  (mic) {};
+\draw ([yshift=6pt]mic.east) -- ([yshift=-6pt]mic.east);
+
+%------- Adder --------- 
+\node[dspadder,left=of mic,left=1.5cm,label={above right:$-$},label={below right:$+$}] 
+  (add) {};
+  
+%------- Postfilter ----------------  
+\node[dspfilter,left=of add,left=1.5cm]
+  (PF) {$W$};  
+  
+%------- Forward path ----------------   
+\node[coordinate,left=of add,left=3.35cm]
+  (fp1) {};
+\node[dspfilter,above=of fp1,above=1.25cm,minimum height=1.5cm,minimum width=1cm]
+  (gain) {$G$};
+\node[coordinate,above=of gain,above=1.25cm]
+  (fp2) {};
+
+%------- Adaptive filter 1 ---------
+\node[dspnodefull,right=of fp2,right=3.5cm]
+  (adnode) {$u(t)$};
+\node[dspfilter,right=of gain,right=2.525cm,minimum height=1.5cm,minimum width=1cm] 
+  (adfilt) {$\hat{F}$};
+
+%------- LS symbol ---------
+\coordinate (lscoord) at ($(fp2)+(5.6,0)$);
+\pic[rotate=90,scale=0.8] (ls) at (lscoord) {Speaker};
+
+%------- Real RIR block ---------
+\node[dspfilter,right=of gain,right=5.1cm,minimum height=1.5cm,minimum width=1cm]
+  (feedback) {$F$};
+  
+%------- Adaptive filter arrow ---------   
+\node[dspnodefull,left=of add,xshift=3mm]
+  (adfilt_upd_1) {};
+\node[coordinate,above=of adfilt_upd_1,above=1cm]
+  (adfilt_upd_2) {};
+\coordinate (aux) at ([yshift=-4pt]adfilt.center);
+
+%--------- Dummy nodes to avoid labels clipping
+\node at (0.15,0) {};
+\node at (-3,4.45) {};
+\node at (-4,-0.55) {};
+
+%----------------------------------------------------------------------------------------------------------
+%%%%%%%%%%%%%%%%%%%%%%%
+% Connections
+%%%%%%%%%%%%%%%%%%%%%%%
+\draw[dspconn] (ns) -- (mic);
+\draw[dspconn] (mic) -- node[midway,below=0.12cm] {$y(t)$} (add);
+%--------- Forward path (from adder to ls)
+\draw[dspconn] (add) -- node[midway,xshift=0mm,below=0.05] {$\myerrsig[t,\hat{\vect{f}}(t)]$} (PF);
+\draw[dspline] (PF)  -- node[midway,below=0.12cm,xshift=-0.25cm] {$\hat{v}(t)$} (fp1);
+\draw[dspconn] (fp1) -- (gain);
+\draw[dspline] (gain) -- (fp2);
+\draw[dspline] (fp2) -- (adnode);
+\draw[dspconn] (ls-front) to[out=-10,in=90] (feedback);
+%--------- Adaptive filter update
+\draw[dspline,dashed] (adfilt_upd_1) -- (adfilt_upd_2);
+\draw[dspconn,dashed] (adfilt_upd_2) -- ( $ (adfilt_upd_2)!75pt!(aux) $ );
+%--------- Adaptive filter
+\draw[dspconn] (adnode) -- (ls-back);
+\draw[dspconn] (adnode) -- (adfilt);
+\draw[dspconn] (adfilt) -- node[midway,yshift=0,right] {$\hat{y}[t |\hat{\vect{f}}(t)]$} (add);
+%------- Real RIR
+\draw[dspconn] (feedback) to[out=-90,in=40] node[midway,above=-0.30cm,xshift=0.5cm] {$x(t)$} ([yshift=3pt]mic.east);
+
+\end{tikzpicture}

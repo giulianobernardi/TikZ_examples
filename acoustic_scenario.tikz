@@ -1,0 +1,30 @@
+% -*- root: ./main_tikz.tex -*-
+
+\begin{tikzpicture}
+
+	\def\myrad{3cm}
+
+	\foreach \Radius/\Shade in 
+	{1.4/10,1.37/20,1.33/40,1.3/60,1.27/80}
+	\fill[mygreen!\Shade]
+	  (0,0) circle [radius=\myrad*\Radius];
+	\fill[white]
+	  (0,0) circle (3cm);
+	\coordinate (origo) at (0,0);
+	\coordinate (oline) at (0:\myrad);
+
+	\foreach \Angle [count=\xi] in {0,30,60,125,230,280}{
+	  \pic[rotate=\Angle-90] (sp\xi) at (\Angle:\myrad) {Speaker};
+	  \draw[dashed] (0,0) -- (\Angle:\myrad) node (cc\xi) {};
+	  % \pic [draw, ->, "$\theta_\xi$", angle radius=1cm+1/5*\xi cm,angle eccentricity=1.2] {angle = oline--origo--cc\xi}; 
+	}
+	\draw[dashed]
+	  (210:4.2cm) -- (30:4.2cm)
+	  (120:4.2cm) -- (300:4.2cm);
+	\pic[rotate=45] {Human};
+	% draw some arrows from and to the speakers
+	\draw[-latex] (sp1-front) -- ++(-10pt,0pt);
+	\draw[-latex] (sp1-back) -- ++(10pt,0pt);
+	\draw[latex-] (sp3-front) -- ++(240:10pt);
+	\draw[latex-] (sp3-back) -- ++(60:10pt);
+\end{tikzpicture}

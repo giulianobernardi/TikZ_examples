@@ -1,0 +1,163 @@
+% -*- root: ../main_tikz.tex -*-
+%
+\tikzstyle{startstop} = [rectangle, rounded corners, minimum width=3cm, minimum height=1cm,text centered, draw=black, fill=white]
+\tikzstyle{io} = [trapezium, trapezium left angle=70, trapezium right angle=110, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=blue!30]
+%\tikzstyle{process} = [rectangle, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=orange!30]
+\tikzstyle{process} = [rectangle, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=white]
+\tikzstyle{processFD} = [rectangle, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=green!30]
+\tikzstyle{processPEM} = [rectangle, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=gray!30]
+\tikzstyle{processK} = [rectangle, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=blue!30]
+\tikzstyle{decision} = [diamond, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=white]
+\tikzstyle{arrow} = [thick,->,>=stealth]
+
+\newcommand{\xbox}{10}
+\newcommand{\ybox}{10}
+
+\begin{tikzpicture}[node distance=2cm]
+	%
+	% Nodes
+	\node (start) [startstop] {Start};
+	\node (init1) [process, text centered, text width=4cm, below of=start] {Initialize\\ 
+				$\hat{\mathbf{F}}(0) = \mathbf{d}^\mathrm{T}(0) = \mathbf{0}_\mathrm{M \times 1}$
+				};
+	\node (init2) [process, text centered, text width=4cm, below of=init1] {Initialize $\mathbf{W}_\mathrm{2}(0)$\\ 
+				};
+	\node (block_sel) [processFD, text centered, text width=7cm, below of=init2] {Select block from loudspeaker\\ signal and take FFT\\ 
+				\scriptsize$\mathbf{U}(k) = \mathrm{diag}\left\{\mathbf{F}_\mathrm{M} \left[u(kR - M + 1),\ldots,u(kR)\right]^\mathrm{H} \right\}$
+				};
+	\node (fbs_est) [processFD, text centered, text width=6cm, below of=block_sel] {Calculate feedback signal estimate\\ 
+				\scriptsize$\hat{\mathbf{y}}(k) = \mathbf{Q}^\mathrm{H} \mathbf{F}^{-1}_\mathrm{M}  \mathbf{U}(k) \hat{\mathbf{F}}(k)$
+				};
+	\node (err) [process, text centered, text width=4cm, below of=fbs_est] {Calculate error signal\\ 
+				$\mathbf{d}(k) = \mathbf{y}(k) - \hat{\mathbf{y}}(k)$
+				};
+	\node (err_model) [processPEM, text centered, text width=7cm, below of=err] {Estimate model of the error signal\\ 
+				\scriptsize$[\hat{\mathbf{h}}(k), \hat{\sigma}_{\mathrm{d_\mathrm{h}}}^2(k)] = \mathtt{Levinson-Durbin}\left([\mathbf{d}(k);\mathbf{d}(k-1)]\right)$
+				};
+	\node (prefilt_uy) [processPEM, text centered, text width=7cm, below of=err_model] {Filter microphone and loudspeaker signal\\[-5mm] 
+				\scriptsize
+				\begin{align}
+					\mathbf{u}_\mathrm{h}(k) &= \mathtt{filter} \left( \hat{\mathbf{h}}(k),1,\mathbf{u}(k) \right) \nonumber\\
+					\mathbf{y}_\mathrm{h}(k) &= \mathtt{filter} \left( \hat{\mathbf{h}}(k),1,\mathbf{y}(k) \right) \nonumber
+				\end{align}
+				};
+	\node (fft_pref_u) [processFD, text centered, text width=6cm, right of=init1, xshift=8cm] {Take FFT of prewhitened LS signal\\ 
+				$\mathbf{U}_\mathrm{h}(k) = \mathrm{diag}\left\{ \mathbf{F}_\mathrm{M} \mathbf{u}_\mathrm{h} \right\}$
+				};
+	\node (pref_fbs_est) [processFD, text centered, text width=6cm, below of=fft_pref_u] {Calculate prewhitened feedback signal estimate\\ 
+				$\hat{\mathbf{y}}_\mathrm{h}(k) = \mathbf{Q}^\mathrm{H} \mathbf{F}^{-1}_\mathrm{M} \mathbf{U}_\mathrm{h}(k) \hat{\mathbf{F}}(k)$
+				};
+	\node (pref_err) [processPEM, text centered, text width=6cm, below of=pref_fbs_est] {Calculate prewhitened error signal\\ 
+				$\mathbf{d}_\mathrm{h}(k) = \mathbf{y}_\mathrm{h}(k) - \hat{\mathbf{y}}_\mathrm{h}(k)$
+				};
+	\node (fft_pref_err) [processFD, text centered, text width=6cm, below of=pref_err] {Take FFT of prewhitened error signal\\ 
+				$\mathbf{D}_\mathrm{h}(k) = \mathbf{F}_\mathrm{M} \mathbf{Q} \mathbf{d}_\mathrm{h}(k)$
+				};
+	% KFDAF
+	\node (KFDAF_a) [processK, text centered, text width=6.5cm, below of=fft_pref_err] {Evaluate $\hat{\boldsymbol{\Psi}}_\mathrm{e e}(k)$\\
+				$\hat{\boldsymbol{\Psi}}_\mathrm{e e}(k) = \boldsymbol{\Psi}_\mathrm{d_a d_a}(k) - \mathbf{U}_\mathrm{h}(k) \mathbf{P}(k) \mathbf{U}_\mathrm{h}^\mathrm{H}(k)$
+				};
+	\node (KFDAF_b) [processK, text centered, text width=5cm, below of=KFDAF_a, yshift=0cm]{Threshold $\hat{\boldsymbol{\Psi}}_\mathrm{e e}(k)$ with $\hat{\sigma}_{\mathrm{d_a}}^2(k)$};
+	\node (KFDAF_c) [processK, text centered, text width=7cm, below of=KFDAF_b, yshift=-0.5cm]{Update P\\[-4mm] 
+				\scriptsize 
+				\begin{align}
+				\mathbf{P}^\mathrm{+}(k) &= \left[ \mathbf{I}_\mathrm{M} - \frac{R}{M} \mathrm{diag}\{\boldsymbol\mu (k)\} \mathbf{U}_\mathrm{h}^\mathrm{H}(k) \mathbf{U}_\mathrm{h}(k)\right] \mathbf{P}(k)\nonumber\\
+				\mathbf{P}(k+1) &= A^2 \cdot \mathbf{P}^\mathrm{+}(k) + M \cdot \mathrm{diag}\left\{\hat{\boldsymbol{\Phi}}_{\Delta \Delta}\right\} \nonumber
+				\end{align}
+				};		
+	\node (KFDAF_keyval) [processK, text centered, text width=4cm, below of=KFDAF_c, yshift=-1cm]{\\[-9mm] 
+				\begin{align}
+				\lambda &= A \nonumber\\
+				\mathbf{W}_\mathrm{1}(k) &= \hat{\boldsymbol{\Psi}}_\mathrm{e e}(k) \nonumber\\
+				\mathbf{W}_\mathrm{2}(k+1) &= \mathbf{P}(k+1) \nonumber
+				\end{align}
+				};	
+	\node (stepsize) [processK, text centered, text width=8cm, below of=KFDAF_keyval, yshift=-0.5cm] {Calculate \textbf{optimal} stepsize\\ 
+				\scriptsize$\mathrm{diag}\{\boldsymbol\mu (k)\} = \mathbf{W}_\mathrm{2}(k) \left[ \mathbf{U}_\mathrm{h}(k) \mathbf{W}_\mathrm{2}(k) \mathbf{U}_\mathrm{h}^\mathrm{H}(k) + \mathbf{W}_\mathrm{1}(k)\right]^{-1} $
+				};
+	%-------------------------------------									
+	\node (update) [processFD, text centered, text width=8cm, below of=stepsize, yshift=-0.25cm] {Update equation\\
+				\scriptsize$\hat{\mathbf{F}}(k+1) = \lambda \left[ \hat{\mathbf{F}}(k) + \mathbf{F}_\mathrm{M}\left[ \mathbf{I}_\mathrm{M} - \mathbf{Q}\mathbf{Q}^\mathrm{H} \right] \mathbf{F}_\mathrm{M}^{-1} \cdot\,\mathrm{diag}\{\boldsymbol\mu (k)\} \mathbf{U}_\mathrm{h}^\mathrm{H}(k) \mathbf{D}_\mathrm{h}(k)\right]$
+				};
+
+	
+	\node (updateDelta1) [decision, text width=2.5cm, aspect=2, below of=update, yshift=-0.5cm] {\scriptsize$\mathtt{mod}(k,N_\mathrm{avg}) == 0$};		
+	\node (updateDelta2) [processK, text width=4.5cm, aspect=2, right of=updateDelta1, xshift = 4cm] {Update $\hat{\Phi}_{\Delta \Delta}(l)$%
+				\begin{align}
+				\hat{\Phi}_\mathrm{f f}(l) &= \mathbb{E}_\mathrm{k}\left\{ \vert \hat{F}(l,k+1) \vert^2 \right\}\nonumber\\
+				\hat{\Phi}_{\Delta \Delta}(l) &= (1-A^2) \hat{\Phi}_\mathrm{f f}(l)\nonumber
+				\end{align}
+	};		
+	
+	\node (over) [decision, text width=1.5cm, below of=updateDelta1, yshift=-2.0cm] {Is signal\\ over};		
+	\node (stop) [startstop, below of=over, yshift=-1.75cm ] {Stop};
+	
+	\node (legendPEM) [processPEM, text centered, text width=3cm, left of=over, xshift=-7.25cm, yshift=-2.0cm] {PEM operations};
+	\node (legendK) [processK, text centered, text width=3cm, right of=legendPEM, xshift=1.5cm] {Kalman operations};	
+	\node (legendFD) [processFD, text centered, text width=3cm, left of=legendPEM, xshift=-1.5cm] {FDAF operations};	
+	%
+	% Arrows
+	\draw [arrow] (start) -- (init1);
+	\draw [arrow] (init1) -- (init2);
+	\draw [arrow] (init2) -- (block_sel);
+	\draw [arrow] (block_sel) -- (fbs_est);
+	\draw [arrow] (fbs_est) -- (err);
+	\draw [arrow] (err) -- (err_model);
+	\draw [arrow] (err_model) -- (prefilt_uy);
+	\draw [arrow] (prefilt_uy.south) -- ++(0,-1.5cm) -- ++(4.5cm,0)
+	                           |- ($(fft_pref_u.north)+(0,1.5cm)$) -- (fft_pref_u.north);
+	\draw [arrow] (fft_pref_u) -- (pref_fbs_est);
+	\draw [arrow] (pref_fbs_est) -- (pref_err);
+	\draw [arrow] (pref_err) -- (fft_pref_err);
+	\draw [arrow] (fft_pref_err) -- (KFDAF_a);
+	\draw [arrow] (KFDAF_a) -- (KFDAF_b);
+	\draw [arrow] (KFDAF_b) -- (KFDAF_c);
+	\draw [arrow] (KFDAF_c) -- (KFDAF_keyval);
+	\draw [arrow] (KFDAF_keyval) -- (stepsize);
+	\draw [arrow] (stepsize) -- (update);
+	\draw [arrow] (update) -- (updateDelta1);
+	\draw [arrow] (updateDelta1) -- node[above,xshift=-0.15cm] {YES} (updateDelta2);
+	\draw [arrow] (updateDelta1) -- node[right] {NO} (over);
+	\draw [arrow] (updateDelta2) |- (over);
+	\draw [arrow] (over) -- node[right] {YES} (stop);
+	\draw [arrow] (over.west) -- ++(-0.5cm,0) node[above] {NO}
+	                          -- ++(-13cm,0) |- (block_sel.west);
+%        %                   
+%     	% ----------------------------------------------------
+%     	% Highlight PEM box
+%        \draw[gray,dashed,dash pattern=on 8pt off 4pt,rounded corners,opacity=1,line width=0.8mm]
+%             	([xshift=-\xbox pt,yshift=\ybox pt]err_model.north west) --
+%             	([xshift=\xbox pt,yshift=\ybox pt]err_model.north east) --
+%             	([xshift=\xbox pt,yshift=-\ybox pt]err_model.south east) --
+%             	([xshift=\xbox pt,yshift=-\ybox pt]prefilt_uy.north east) --
+%             	([xshift=\xbox pt,yshift=-\ybox pt]prefilt_uy.south east) -- node[midway,xshift=-70pt,yshift=-20pt,opacity=1]  (legendPEM){\Large
+%                                                         	\begin{minipage}{0.1\linewidth}
+%                                                         		\center
+%                                                         		\textbf{PEM}
+%                                                     		\end{minipage}}
+%             	([xshift=-\xbox pt,yshift=-\ybox pt]prefilt_uy.south west) --
+%             	([xshift=-\xbox pt,yshift=-\ybox pt]prefilt_uy.north west) -- 
+%             	([xshift=-\xbox pt,yshift=-\ybox pt]err_model.south west) --
+%             	cycle;
+%    	% ----------------------------------------------------                          
+% 
+%     	% ----------------------------------------------------
+%     	% Highlight Kalman box
+%        \draw[blue,dashed,dash pattern=on 8pt off 4pt,rounded corners,opacity=1,line width=0.8mm]
+%             	([xshift=-\xbox pt,yshift=\ybox pt]KFDAF_a.north west) --
+%             	([xshift=\xbox pt,yshift=\ybox pt]KFDAF_a.north east) --
+%             	([xshift=\xbox pt,yshift=-\ybox pt]KFDAF_a.south east) --
+%             	([xshift=\xbox pt,yshift=\ybox pt]stepsize.north east) --
+%             	([xshift=\xbox pt,yshift=-\ybox pt]stepsize.south east) --            	
+% 		([xshift=-\xbox pt,yshift=-\ybox pt]stepsize.south west) -- node[midway,xshift=-40pt,yshift=+0pt,opacity=1]  (legendPEM){\Large
+%                                                         	\begin{minipage}{0.1\linewidth}
+%                                                         		\center
+%                                                         		\textbf{Kalman\\filter}
+%                                                     		\end{minipage}}
+%             	([xshift=-\xbox pt,yshift=\ybox pt]stepsize.north west) -- 
+%             	([xshift=-\xbox pt,yshift=-\ybox pt]KFDAF_a.south west) --
+%             	cycle;
+%    	% ----------------------------------------------------                          
+
+
+\end{tikzpicture}

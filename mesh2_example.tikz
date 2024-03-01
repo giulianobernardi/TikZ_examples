@@ -1,0 +1,8 @@
+% -*- root: ./main_tikz.tex -*-
+%
+\begin{tikzpicture}
+	\begin{axis}
+		\addplot3[surf,domain=0:360,samples=40]
+		{sin(x)*sin(y)};
+	\end{axis}	
+\end{tikzpicture}

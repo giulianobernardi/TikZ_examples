@@ -1,0 +1,25 @@
+% -*- root: ./main_tikz.tex -*-
+%
+% Preamble: \pgfplotsset{width=7cm,compat=newest}
+\begin{tikzpicture}
+	\begin{axis}[
+	ylabel style={align=center}, 
+	yticklabel style={text width=2em},
+	xticklabel style={align=center,text width=2em},
+	stack plots=y,stack dir=minus,
+	cycle list name=color] % exotic, blackwhite, mark list, color list, linestyles
+		\addplot coordinates {(0,1) (0.5,1) (1,1)};
+		\addplot coordinates {(0,1) (0.5,1) (1,1)};
+		\addplot coordinates {(0,1) (0.5,1) (1,1)};
+		\addplot coordinates {(0,1) (0.5,1) (1,1)};
+		\addplot coordinates {(0,1) (0.5,1) (1,1)};
+		\addplot coordinates {(0,1) (0.5,1) (1,1)};
+		\addplot coordinates {(0,1) (0.5,1) (1,1)};
+		\addplot coordinates {(0,1) (0.5,1) (1,1)};
+		\addplot coordinates {(0,1) (0.5,1) (1,1)};
+		\addplot coordinates {(0,1) (0.5,1) (1,1)};
+		\addplot coordinates {(0,1) (0.5,1) (1,1)};
+		\addplot coordinates {(0,1) (0.5,1) (1,1)};
+		\addplot coordinates {(0,1) (0.5,1) (1,1)};
+	\end{axis}
+\end{tikzpicture}

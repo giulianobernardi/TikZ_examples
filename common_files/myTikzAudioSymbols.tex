@@ -1,0 +1,58 @@
+% Microphone and LS symbols
+% Speaker
+\tikzset{
+    % Speaker/.pic={
+    %     \filldraw[fill=gray!40,pic actions]
+    %     (-15pt,0) --
+    %       coordinate[midway] (-front)
+    %     (15pt,0) --
+    %     ++([shift={(-6pt,8pt)}]0pt,0pt) coordinate (aux1) --
+    %     ++(-18pt,0) coordinate (aux2)
+    %     -- cycle
+    %     (aux1) -- ++(0,6pt) -- coordinate[midway] (-back) ++(-18pt,0) -- (aux2);
+    % },
+    pics/Speaker/.style n args={2}{
+        code={
+    \filldraw[draw=#1,fill=#2,pic actions]
+        (-15pt,0) --
+          coordinate[midway] (-front)
+        (15pt,0) --
+        ++([shift={(-6pt,8pt)}]0pt,0pt) coordinate (aux1) -- 
+        ++(-18pt,0) coordinate (aux2)
+        -- cycle
+        (aux1) -- ++(0,6pt) -- coordinate[midway] (-back) coordinate[xshift=7.5pt] (-mid) ++(-18pt,0) -- (aux2);
+        },
+    },
+    pics/Speaker/.default={black}{gray!40},
+    % --------------------------------
+  % OLD version (does not accommodate for a color change)
+    % Mic/.pic={
+  % \filldraw[fill=gray!40,circle,pic actions] (0,0) circle (5pt) coordinate[xshift=5pt] (-front) coordinate[xshift=-5pt] (-back) coordinate (-mid) ;
+  % \draw ([yshift=6pt]5pt,0) -- ([yshift=-6pt]5pt,0);
+    % },  
+    % --------------------------------
+    pics/Mic/.style n args={2}{
+        code={
+    \filldraw[draw=#1,fill=#2,circle] (0,0) circle (5pt) coordinate[xshift=5pt] (-front) coordinate[xshift=-5pt] (-back) coordinate (-mid) ;
+    \draw[draw=#1] ([yshift=6pt]5pt,0) -- ([yshift=-6pt]5pt,0);
+        },
+    },
+    pics/Mic/.default={black}{gray!40},
+    % --------------------------------
+    pics/Human/.style n args={2}{
+        code={
+            \filldraw[fill=#1]
+              (0,0.7cm) ellipse [x radius=5pt,y radius=3pt]
+              (0,-0.7cm) ellipse [x radius=5pt,y radius=3pt];
+            \filldraw[fill=#1]
+              (0.7,4pt) -- (0.7,-4pt) -- (0.95,0pt) -- cycle;
+            \filldraw[fill=#1]
+              (0,0) ellipse [x radius=0.8cm, y radius=0.7cm];
+            \filldraw[fill=#2]
+              (0.5,0.55) arc[start angle=50,end angle=310,x radius=0.8cm, y radius=0.7cm]
+              to[out=60,in=230] cycle;
+        },
+    },
+    pics/Human/.default={skin}{black},
+    % --------------------------------
+}

@@ -1,0 +1,79 @@
+% -*- root: ./main_tikz.tex -*-
+%
+
+\begin{tikzpicture}
+%%%%%%%%%%%%%%%%%%%%%%%
+% Blocks and nodes
+%%%%%%%%%%%%%%%%%%%%%%%
+  
+%------- Mic symbol ---------
+\foreach \ind/\y/\lab in {1/0/1,2/0/2,3/-2/M} {
+
+\node[fill=gray!40,circle,minimum size=0.35cm,draw,right=0.5cm,yshift=-7.5cm - 2.5*\ind cm + \y cm,label=${m}_\lab$] 
+  (mic\ind) {};
+\draw ([yshift=6pt]mic\ind.west) -- ([yshift=-6pt]mic\ind.west);  
+
+% Waves
+\path [snake=expanding waves, thick,segment length=1mm, segment angle=25, postaction={draw}]
+($(mic\ind)+(-1.0,0.0)$) to ($(mic\ind)+(-0.5,0.0)$);
+
+\node[dspfilter,right=of mic\ind,right=1.5cm,minimum width=5cm,minimum 
+height=1.5cm,label={$y_\lab (t)$}] (micsig\ind)  {%
+    \hspace{-3.85cm}
+    %
+    \begin{minipage}{1cm}
+        \vspace{-2.5pt}
+        \includegraphics[width=4.85cm,height=1.35cm]{gfx/tikz/sig\ind-1.pdf}
+    \end{minipage}
+    %
+  }; 
+
+
+
+%%------- spect ---------------- 
+\node[dspfilter,right=of micsig\ind,right=1.75cm,minimum width=5cm,minimum 
+height=1.5cm,label={$Y_\lab (t,\omega)$}] (spect\ind) {%
+    \hspace{-4cm}
+    %
+    \begin{minipage}{1cm}
+        \vspace{-2.5pt}
+        \includegraphics[width=5cm,height=1.5cm]{gfx/tikz/sig_spect\ind-1.pdf}
+    \end{minipage}
+    %
+  };  
+
+% Connections
+\draw[dspconn] (mic\ind) -- (micsig\ind);  
+\draw[dspconn] (micsig\ind) -- node[above]{STFT} (spect\ind);  
+
+}
+
+\node[above= of mic3,above=2.08cm]{\vdots};
+\node[above= of micsig3,above=1.5cm]{\vdots};
+\node[above= of spect3,above=1.5cm]{\vdots};
+
+\coordinate (centralpoint) at ($(spect1.east)!.5!(spect3.east)+(2cm,0cm)$);
+
+\foreach \ind/\lab in {1/1,2/2,3/M} {
+	\foreach \y in {-0.5,-0.4,...,1.0} {
+		\draw[dspline,opacity=0.2] ($(spect\ind.east)+(0cm,-0.2cm+\y cm)$) --  ($(spect\ind.east)+(2cm+ \y cm,-0.2cm + \y cm)$);  
+	}
+	\draw[dspline] ($(spect\ind.east)+(0cm,-0.2cm)$) -- node[above, sloped]{$y_\lab(\omega^*)$}  ($(spect\ind.east)+(2cm,-0.2cm)$);  	
+}
+
+\draw[dspline] ($(spect1.east)+(2cm,-0.2cm)$) --  ($(spect3.east)+(2cm,-0.2cm)$);  
+
+\foreach \y in {-0.5,-0.4,...,1.0} {
+	\draw[dspline,opacity=0.2] ($(spect1.east)+(2cm+ \y cm,-0.2cm + \y cm)$) --  ($(spect3.east)+(2cm+ \y cm,-0.2cm + \y cm)$);  
+}
+
+%\draw[dspconn] (centralpoint) -- node[above,xshift=0.45cm, sloped]{$\mathbf{y}(\omega^*)=[y_1(\omega^*)\:\hdots\:y_M(\omega^*)]^T$}   ($(centralpoint)+(6cm,0.0cm)$);  
+\draw[dspconn] (centralpoint) -- node[right,xshift=1cm, sloped]{$\mathbf{y}(\omega^*)=
+			\left[\begin{array}{c}
+                           y_1(\omega^*)\\
+				y_2(\omega^*)\\
+				\vdots\\
+				y_M(\omega^*)
+                          \end{array}\right]$}   ($(centralpoint)+(2cm,0.0cm)$);  
+
+\end{tikzpicture}

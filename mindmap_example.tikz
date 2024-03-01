@@ -1,0 +1,19 @@
+% -*- root: ./main_tikz.tex -*-
+%
+\begin{tikzpicture}[mindmap, grow cyclic,
+	every node/.style={concept,scale=0.7,font=\bf}, concept color=cl0,
+	level 1/.append style={level distance=3.5cm},
+	level 2/.append style={level distance=2.5cm}]
+	\node[anchor=center,inner sep=0pt] at (0,0)
+	{Perceptual\\ evaluation with normal hearing\\ subjects}
+	[grow cyclic list={0,130,220}]
+			child [concept color=cl2, level distance=2.75cm, text width=5em] { node { Cadaver recording } }
+			child [concept color=cl2, level distance=2.75cm, text width=5em] { node { Stimuli collection } }
+		}
+		child [concept color=cl1, level distance=3.75cm] { node {Listening test}
+			[grow cyclic list={0}]
+			child [concept color=cl2, text width=5em] { node { Statistical analysis } }
+		}
+		child [concept color=cl1, level distance=4cm, text width=7em] { node {Subjective-to-objective results correlation} 
+		};
+\end{tikzpicture}

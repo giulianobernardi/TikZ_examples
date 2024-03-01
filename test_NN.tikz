@@ -1,0 +1,58 @@
+% -*- root: ./main_tikz.tex -*-
+
+\begin{tikzpicture}[
+    node distance=1cm,
+    layer/.style={
+        rectangle,
+        draw=black,
+        thick,
+        minimum width=2cm,
+        minimum height=7cm
+    },
+    neuron/.style={
+        circle,
+        draw=black,
+        thick,
+        fill=white,
+        minimum size=1cm
+    }
+]
+
+% Layers
+\node[layer] (input) {Input Layer};
+\node[layer, right=of input] (hidden1) {Hidden Layer 1};
+\node[layer, right=of hidden1] (hidden2) {Hidden Layer 2};
+\node[layer, right=of hidden2] (output) {Output Layer};
+
+% Neurons in Input Layer
+\foreach \i in {1,...,4}
+    \node[neuron] (I-\i) at ([yshift={(2.5-\i)*1.25cm}]input.north) {};
+
+% Neurons in Hidden Layer 1
+\foreach \i in {1,...,3}
+    \node[neuron] (H1-\i) at ([yshift={(2-\i)*1.5cm}]hidden1.north) {};
+
+% Neurons in Hidden Layer 2
+\foreach \i in {1,...,3}
+    \node[neuron] (H2-\i) at ([yshift={(2-\i)*1.5cm}]hidden2.north) {};
+
+% Neurons in Output Layer
+\foreach \i in {1,...,2}
+    \node[neuron] (O-\i) at ([yshift={(1.5-\i)*2cm}]output.north) {};
+
+% Connect neurons In-Hidden1
+\foreach \i in {1,...,4}
+    \foreach \j in {1,...,3}
+        \draw[->] (I-\i) -- (H1-\j);
+
+% Connect neurons Hidden1-Hidden2
+\foreach \i in {1,...,3}
+    \foreach \j in {1,...,3}
+        \draw[->] (H1-\i) -- (H2-\j);
+
+% Connect neurons Hidden2-Out
+\foreach \i in {1,...,3}
+    \foreach \j in {1,...,2}
+        \draw[->] (H2-\i) -- (O-\j);
+
+\end{tikzpicture}

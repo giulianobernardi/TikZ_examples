@@ -1,0 +1,228 @@
+% -*- root: ./main_tikz.tex -*-
+\newcommand{\mydim}{6.5}
+\newcommand{\pltshft}{1.75}
+\newcommand{\dashlen}{0.25}
+\newcommand{\marksize}{5.5}
+\newcommand{\angarr}{2}
+\newcommand{\Pmin}{0.1}
+\newcommand{\axmin}{-0.1}
+\newcommand{\axmax}{1.1}
+\newcommand{\labelshft}{50}
+\newcommand{\bigR}{0.5}
+\newcommand{\smallR}{0.05}
+
+
+
+
+% New
+\definecolor{mycolor1}{HTML}{66C2A5}%
+\definecolor{mycolor2}{HTML}{FDB863}%
+\definecolor{mycolor3}{HTML}{FC8D62}%
+\definecolor{mycolor4}{HTML}{8DA0CB}%
+%
+
+% New
+\definecolor{dc01}{HTML}{8DD3C7}%
+\definecolor{dc02}{HTML}{FFFFB3}%
+\definecolor{dc03}{HTML}{BEBADA}%
+\definecolor{dc04}{HTML}{FB8072}%
+\definecolor{dc05}{HTML}{80B1D3}%
+\definecolor{dc06}{HTML}{FDB462}%
+\definecolor{dc07}{HTML}{B3DE69}%
+\definecolor{dc08}{HTML}{FCCDE5}%
+\definecolor{dc09}{HTML}{D9D9D9}%
+\definecolor{dc10}{HTML}{FDB863}%
+%
+
+\definecolor{maroon}{rgb}{0.5,0,0}%
+\colorlet{colLabels}{gray}
+\colorlet{colTh}{mycolor1}
+\colorlet{colMa}{mycolor4}
+\colorlet{colMb}{mycolor4}
+\colorlet{colROC}{mycolor2}
+\colorlet{colPR}{mycolor2}
+
+
+
+\tikzstyle{myDummyNode} = [anchor=center,minimum size=0,inner sep=0,outer sep=0]
+\tikzstyle{myDash} = [dashed,colLabels,thick]
+\tikzstyle{myEllipse} = [colLabels,thick,fill,solid,opacity=0.5,fill opacity=0.1]
+\tikzstyle{mySolid} = [colLabels,thick,solid,colLabels,thick,opacity=0.5]
+\tikzstyle{myLabelNode} = [draw,colLabels,thick,scale=0.8,text opacity=1,opacity=0.5,anchor=center]
+\tikzstyle{myROCcurve} = [dashed,colROC,line width=2.5pt,mark = square*,mark options={solid,fill,scale=1.75}]
+% \tikzstyle{myPRcurve} = [dashed,colPR,line width=2.5pt,mark = diamond*,mark options={solid,fill,scale=1.75}]
+\tikzstyle{myPRcurve} = [myROCcurve]
+
+
+
+\begin{tikzpicture}
+%/*
+    % Define axis style 
+    \pgfplotsset{myaxisstyle/.style={%
+        yticklabel style={text width=2.em,align=right},
+        xticklabel style={text width=2.em,anchor=north,align=center},
+        xmajorgrids,ymajorgrids,
+        clip=false,
+        anchor=center,
+        scale only axis,
+        width=1.25*\mydim cm,
+        height=1.25*\mydim cm,
+        ymin=\axmin, ymax=\axmax, xmin=\axmin, xmax=\axmax,
+        ytick={0, 0.2, ...,1}, xtick={0, 0.2, ...,1}
+    }}
+
+    % Coordinate of axis
+    \coordinate (lp) at (-\pltshft cm - 0.5*\mydim cm,0) {};
+    \coordinate (rp) at (\pltshft cm+0.5*\mydim cm,0) {};
+
+    % ROC plot
+    \begin{axis}[
+        myaxisstyle,
+        at=(lp),
+        xlabel = FPR, ylabel =TPR, 
+        ]
+
+        % ------------------------------------------
+        % ROC labels
+		\draw[myEllipse] (axis cs:0.5,0) node[myDummyNode] (eROC1){} ellipse[x radius=\bigR,y radius=\smallR] node[myLabelNode,rotate=0] (cROC1) at (axis cs:0.3,-0.25) {$TP = 0$};
+		% \draw[mySolid] ($(eROC1)+(axis direction cs:0,-\smallR)$) -- (cROC1);
+		% \draw[mySolid] ($(eROC1)+(axis direction cs:0,0)+(75:1 and 2)$) -- (cROC1);
+		\draw[mySolid] (axis cs:0.3,-0.045) -- (cROC1);
+
+ 		% \draw[myEllipse] (axis cs:1,0) arc [start angle=0,end angle=360,x radius=\bigR,y radius=\smallR]
+   %          node[myDummyNode,pos=0.8] (eROC1) {}
+   %          node[myLabelNode,rotate=0] (cROC1) at (axis cs:0.3,-0.2) {$TP = 0$};
+ 		% \draw[mySolid] (eROC1.center) -- (cROC1);
+
+
+
+
+		\draw[myEllipse] (axis cs:0,0.5) node[myDummyNode] (eROC2){} ellipse[x radius=\smallR,y radius=\bigR] node[myLabelNode,rotate=90] (cROC2) at (axis cs:-0.25,0.3) {$FP = 0$};
+		% \draw[mySolid] ($(eROC2)+(axis direction cs:-\smallR,0)$) -- (cROC2);
+		\draw[mySolid] (axis cs:-0.045,0.3) -- (cROC2);
+		
+		\draw[myEllipse] (axis cs:0.5,1) node[myDummyNode] (eROC3){} ellipse[x radius=\bigR,y radius=\smallR] node[myLabelNode,rotate=0] (cROC3) at (axis cs:0.5,1.2) {$TP = GT_+$};
+		\draw[mySolid] ($(eROC3)+(axis direction cs:0,\smallR)$) -- (cROC3);
+
+		\draw[myEllipse] (axis cs:1,0.5) node[myDummyNode] (eROC4) {} ellipse[x radius=\smallR,y radius=\bigR] node[myLabelNode,rotate=90] (cROC4) at (axis cs:1.2,0.7) {$FP = GT_-$};
+		% \draw[mySolid] ($(eROC4)+(axis direction cs:\smallR,0)$) -- (cROC4);
+		\draw[mySolid] (axis cs:1.045,0.7) -- (cROC4);
+
+        % ------------------------------------------
+        % ROC curve (best case)
+        \addplot[name path=ROCbc,myROCcurve,
+        ] coordinates {
+            (0,0)
+            (0,0.5)
+            (0,1)
+            (0.5,1)
+            (1,1)
+        };   
+        % ROC curve (worst case)
+        \addplot[name path=ROCwc,myDash,
+        ] coordinates {
+            (0,0)
+            (1,1)
+        };   
+        % ROC curve (filling)
+        % \addplot[myROCcurve,fill opacity=0.25,forget plot] fill between[of=ROCbc and ROCwc];
+
+        % ------------------------------------------
+        % Get coordinate to draw threshold lines (can't use for loop within axis...)
+        \coordinate (ROC00) at (axis cs:0,0);
+        \coordinate (ROC10) at (axis cs:1,0);
+        \coordinate (ROCbtline) at (axis cs:0.5,0);
+        \coordinate (ROC01) at (axis cs:0,1);
+
+    \end{axis}
+
+    \begin{axis}[
+        myaxisstyle,
+        at=(rp),
+        xlabel = TPR, ylabel =P, 
+        extra y ticks=  {\Pmin},
+        ylabel shift =-17.5pt,
+        extra y tick style={yticklabels={$\frac{GT_+}{GT_++GT_-}$},yticklabel shift=17.5pt}, 
+        ]
+
+        % ------------------------------------------
+        % PR labels
+		\draw[myEllipse,rotate around={6:(0.525,0.055)}] (axis cs:0.525,0.055) node[myDummyNode] (ePR1){} ellipse[x radius=0.95*\bigR,y radius=\smallR];
+		\node[myLabelNode,rotate=0] at (axis cs:0.7,-0.25) (cPR1) {$FP = GT_-$};
+		% \draw[mySolid] ($(ePR1)+(axis direction cs:0,-\smallR)$) -- (cPR1);
+		\draw[mySolid] (axis cs:0.7,0.025) -- (cPR1);
+
+		\draw[myEllipse] (axis cs:0,0.5) node[myDummyNode] (ePR2){} ellipse[x radius=\smallR,y radius=\bigR] node[myLabelNode,rotate=90] (cPR2) at (axis cs:-0.25,0.3) {$TP = 0$};
+		% \draw[mySolid] ($(ePR2)+(axis direction cs:-\smallR,0)$) -- (cPR2);
+		\draw[mySolid] (axis cs:-0.045,0.3) -- (cPR2);
+		
+		\draw[myEllipse] (axis cs:0.5,1) node[myDummyNode] (ePR3){} ellipse[x radius=\bigR,y radius=\smallR] node[myLabelNode,rotate=0] (cPR3) at (axis cs:0.5,1.2) {$FP = 0$};
+		\draw[mySolid] ($(ePR3)+(axis direction cs:0,\smallR)$) -- (cPR3);
+
+		\draw[myEllipse] (axis cs:1,0.55) node[myDummyNode] (ePR4){} ellipse[x radius=\smallR,y radius=\bigR-\Pmin/2] node[myLabelNode,rotate=90] (cPR4) at (axis cs:1.2,0.55)  {$TP = GT_+$};
+		\draw[mySolid] ($(ePR4)+(axis direction cs:\smallR,0)$) -- (cPR4);
+
+		\draw[myEllipse] (axis cs:0,0) node[myDummyNode] (ePR1){} ellipse[x radius=\smallR,y radius=\smallR];
+        \draw[mySolid] (axis cs:0,0) --+ (axis direction cs:-0.15,-0.15) node[myLabelNode,below]
+        {$
+            \begin{aligned}
+             TP &= 0\\
+             0 \leq FP &\leq GT_-
+            \end{aligned}$
+        };
+
+        % ------------------------------------------
+        % PR curve (best case)
+        \addplot[name path=PRbc,myPRcurve,
+        ] coordinates {
+            (0,1)
+            (0.5,1)
+            (1,1)
+            (1,0.5)
+            (1,\Pmin)
+        };   
+        % PR curve (worst case)
+        \addplot[name path=PRwc,myPRcurve,
+        ] coordinates {
+            (0,0)
+        };   
+        % PR curve (worst case)
+        \addplot[name path=ROCwc,myDash,
+        ] coordinates {
+            (0,0)
+            (1,\Pmin)
+        };   
+        % PR curve (filling)
+        % \addplot[myPRcurve,fill opacity=0.25,forget plot] fill between[of=PRbc and PRwc]; 
+
+        % ------------------------------------------
+        % Get coordinate to draw threshold lines (can't use for loop within axis...)
+        \coordinate (PR01) at (axis cs:0,1);
+        \coordinate (PR11) at (axis cs:1,1);
+        \coordinate (PR00) at (axis cs:0,0);
+
+    \end{axis}
+
+    % ------------------------------------------
+    % ROC marks
+    % \node[circle,colMa,thick,fill,draw,inner sep=0pt,minimum size=\marksize pt] at (ROC01)  {};
+    \draw[colMb,line width=2pt,fill] (ROC00) -- (ROC10);
+    % PR marks
+    % \node[circle,colMa,thick,fill,draw,inner sep=0pt,minimum size=\marksize pt] at (PR11) {};
+    \node[circle,colMb,thick,fill,draw,inner sep=0pt,minimum size=\marksize pt] at (PR00) {};
+    % ROC-PR lines
+    % \draw[-latex,colMa,thick] (ROC01) to[out=15,in=165] (PR11);
+    \draw[-latex,colMb,thick] (ROCbtline) to[out=90,in=130] (PR00);
+
+    % ------------------------------------------
+    % ROC thresholds
+    \foreach \a in {45} \draw[-latex,colTh,line width=2.5pt] (ROC00) -- ($(ROC00) + (\a:\angarr cm)$);
+    \node[colTh] at ($(ROC00) + (30:\angarr cm)$) {$\downarrow$ Th};
+
+    % PR thresholds
+    \foreach \a in {-45} \draw[-latex,colTh,line width=2.5pt] (PR01)-- ($(PR01) + (\a:\angarr cm)$);
+    \node[colTh] at ($(PR01) + (-45:1.25*\angarr cm)$) {$\downarrow$ Th};
+
+    
+%*/    
+\end{tikzpicture}%

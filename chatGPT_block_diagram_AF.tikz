@@ -1,0 +1,29 @@
+% -*- root: ./main_tikz.tex -*-
+
+\begin{tikzpicture}[auto, node distance=2cm,>=latex']
+    % We start by placing the blocks
+    \node [input, name=input] {};
+    \node [block, right of=input] (filter) {Adaptive Filter};
+    \node [sum, right of=filter, node distance=3cm] (sum) {+};
+    \node [output, right of=sum] (output) {};
+    \node [block, below of=filter] (algorithm) {Adaptation Algorithm};
+    \node [temp, below of=sum] (temp) {};
+    \node [block, left of=algorithm, node distance=3cm] (error) {Error Computation};
+
+    % We draw an edge between the controller and system block to 
+    % calculate the coordinate u. We need it to place the measurement block. 
+    \draw [->] (input) -- node[name=u] {Input} (filter);
+    \draw [->] (filter) -- node {Output} (sum);
+    \draw [->] (sum) -- node [name=y] {Error}(output);
+    \node [input, below of=y] (measurements) {};
+    \draw [->] (measurements) -- node[pos=0.99] {$-$} 
+        node [near end] {Desired Signal} (sum);
+    \draw [->] (y) |- (error);
+    \draw [->] (error) -- node {Error} (algorithm);
+    \draw [->] (algorithm) -| node[pos=0.99] {$\mu$} 
+        node [near end] {Coefficients} (filter);
+
+    % We place a coordinate halfway between the system and the measurement block to 
+    % have a nice place to put the measurement label. 
+    \coordinate [below of=u] (measurements);
+\end{tikzpicture}

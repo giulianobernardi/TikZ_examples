@@ -1,0 +1,9 @@
+% -*- root: ./main_tikz.tex -*-
+%
+
+\begin{tikzpicture}
+	\draw (-1,0) -- (1,0);
+	\draw (0,-1) -- (0,1);
+	\draw (0,0) circle (0.75);
+	\draw[dashed,red,->] (0,0) -- (30:2); % Polar coordinates
+\end{tikzpicture}

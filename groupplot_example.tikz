@@ -1,0 +1,88 @@
+% -*- root: ./main_tikz.tex -*-
+%
+%
+\begin{tikzpicture}
+%/*
+\pgfplotsset{
+	width=\fwidth*0.55,
+	height=\fheight*0.75,
+	axis on top,
+	ylabel style={align=center}, 
+	yticklabel style={text width=2em},
+	xticklabel style={align=center,text width=2em},
+	xmin=-5,xmax=5,
+	ymin=-5,ymax=5,
+	xtick ={-4,-2,0,2,3.14,4},
+	xmajorgrids,
+	xminorgrids,
+	ymajorgrids,
+	xminorticks=true,
+	yminorticks=true,
+	ylabel shift={-1.0em},
+}
+%		
+\begin{groupplot}[ 
+    group style={
+	group size=2 by 4,
+	vertical sep=25pt,
+	horizontal sep=35pt
+    },
+]
+% -------------------------------------------------------------------------------------------------------------------
+% Plot [1, 1]
+%-----------
+\nextgroupplot[
+		xticklabels={\empty},
+		ylabel={ylabel 1},
+ 		title={subtitle 1 \ref{plots:plot1}},
+]
+\addplot[color=red,mark=o]{x}; \label{plots:plot1}
+\addplot[color=blue,dashed]{-x};\label{plots:plot2}
+\addplot[color=green,samples=100,line width=1pt]{sin(deg(x))};\label{plots:plot3}
+% (Relative) Coordinate at top of the first plot
+\coordinate (top) at (rel axis cs:0,1);
+%-----------
+% Plot [1, 2]
+%-----------
+\nextgroupplot[
+ 		xticklabels={\empty},
+		title={subtitle 2},
+		ylabel={}
+]
+%\node[pin=100:{$(0,0)$}] at (rel axis cs:0.5,0.5) {a};
+%-----------
+% Plot [2, 1]
+%-----------
+\nextgroupplot[
+		yshift=10pt,
+		xticklabels ={-4,-2,0,2,$\pi$,$4$},
+		xlabel={xlabel 1},
+		ylabel={ylabel 2}
+]		
+%-----------	
+% Plot [2, 2]
+%-----------
+\nextgroupplot[
+		yshift=10pt,
+		xlabel={xlabel 2},
+]          
+% (Relative) Coordinate at bottom of the last plot
+\coordinate (bot) at (rel axis cs:1,0);
+\end{groupplot}
+% legend
+\path (top|-current bounding box.north)--
+      coordinate(legendpos)
+      (bot|-current bounding box.north);
+\matrix[
+    matrix of nodes,
+    anchor=south,
+    draw,
+    inner sep=0.2em,
+    draw
+  ]at([yshift=1ex]legendpos)
+  {
+    \ref{plots:plot1}& $y=x$ &[5pt]
+    \ref{plots:plot2}& $y=-x$ &[5pt]
+    \ref{plots:plot3}& $y=\sin(x)$\\};
+%*/
+\end{tikzpicture}%

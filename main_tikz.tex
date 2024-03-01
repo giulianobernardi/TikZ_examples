@@ -1,0 +1,77 @@
+\documentclass[border=0mm]{standalone}
+%\usepackage[active,tightpage]{preview}
+%\usepackage[usenames]{color} %used for font color
+\usepackage{amssymb} %maths
+\usepackage{amsmath} %maths
+
+\usepackage[utf8]{inputenc}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=newest}
+\pgfdeclarelayer{background}
+%\pgfsetlayers{background}
+\pgfplotsset{plot coordinates/math parser=false}
+% \pgfplotsset{yticklabel style={xshift=-0.5em},yticklabel style={text width=3em,align=right},xticklabel style={text width=2em,align=right}}
+\pgfplotsset{yticklabel style={xshift=0em},yticklabel style={text width=0em,align=right},xticklabel style={text width=0em,align=right}}
+\usepgfplotslibrary{fillbetween}
+\usepgfplotslibrary{units}
+
+\newcommand{\heart}{\ensuremath\varheartsuit}
+
+\usepackage{bm}
+\usepackage{siunitx}
+\usepackage{booktabs}
+
+% Similar to the beamer KU template (comment/uncomment)
+\usepackage{wasysym,amsbsy,fourier,mathrsfs}
+
+\usepackage[margin=0cm,nohead]{geometry}
+\usepackage{ifthen}
+\usepackage[customcolors,shade]{hf-tikz}
+
+\usepackage{epstopdf}
+
+% % Colorbrewer for tikz
+\usetikzlibrary{colorbrewer}
+\usepgfplotslibrary{colorbrewer}
+
+%\usetikzlibrary{decorations.pathreplacing,decorations.pathmorphing,decorations.text,
+%decorations.mypathmorphing,decorations.markings}
+\usetikzlibrary{positioning}
+\usetikzlibrary{patterns}
+% \usetikzlibrary{snakes}
+\usetikzlibrary{shapes,arrows}
+\usetikzlibrary{plotmarks,dsp,chains,shapes.geometric}
+\usetikzlibrary{hobby,backgrounds,trees,shapes.callouts}
+\usetikzlibrary{calc,fit}
+\usetikzlibrary{snakes}
+\usetikzlibrary{arrows.meta}
+\usetikzlibrary{pgfplots.groupplots}
+\usetikzlibrary{spy}
+\usetikzlibrary{mindmap}
+\usetikzlibrary{matrix}
+\usetikzlibrary{patterns,angles,quotes}
+\usetikzlibrary{intersections}
+\usetikzlibrary{fadings}
+\usetikzlibrary{shadings}
+\usepackage{tikzsymbols}
+%\usepackage{fixltx2e}
+\usepackage{multirow}
+\usepackage{pgfplotstable}
+\usepackage{etoolbox} %turn off MS6
+\newbool{hideDATA}
+
+\input{common_files/myTikzStyles}
+\input{common_files/myTikzAudioSymbols}
+\input{common_files/myColors}
+\input{common_files/myColormap}
+\input{common_files/myFigureDimensions}
+\input{common_files/mySignalMacros}
+\input{common_files/myTikzIcons}
+%\input{common_files/mypreambles} Still to check
+
+\graphicspath{{./mina/}{./Implants_reports/}{./Spinoff/}}
+
+\begin{document}%
+\noindent%
+\end{document}

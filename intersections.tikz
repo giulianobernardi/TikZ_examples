@@ -1,0 +1,14 @@
+% -*- root: ./main_tikz.tex -*-
+
+\usetikzlibrary {intersections}
+\begin{tikzpicture}[every node/.style={opacity=1, black, above left}]
+	\draw [help lines] grid (3,2);
+	\draw [name path=ellipse] (2,0.5) ellipse (0.75cm and 1cm);
+	\draw [name path=rectangle, rotate=10] (0.5,0.5) rectangle +(2,1);
+	\fill [red, opacity=0.5, name intersections={of=ellipse and rectangle}]
+	(intersection-1) circle (2pt) node {1};
+
+    % Draw a small rectangle (a square) at the second intersection
+    \draw [red, thick, fill=red, opacity=0.5] (intersection-2) ++(-0.1,-0.1) rectangle ++(0.2,0.2) node [below right, black, opacity=1] {2};
+    
+\end{tikzpicture}

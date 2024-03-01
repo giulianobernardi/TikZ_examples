@@ -1,0 +1,239 @@
+\documentclass[border=0mm]{standalone}
+%\usepackage[active,tightpage]{preview}
+%\usepackage[usenames]{color} %used for font color
+\usepackage{amssymb} %maths
+\usepackage{amsmath} %maths
+
+\usepackage[utf8]{inputenc}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=newest}
+\pgfdeclarelayer{background}
+%\pgfsetlayers{background}
+\pgfplotsset{plot coordinates/math parser=false}
+% \pgfplotsset{yticklabel style={xshift=-0.5em},yticklabel style={text width=3em,align=right},xticklabel style={text width=2em,align=right}}
+\pgfplotsset{yticklabel style={xshift=0em},yticklabel style={text width=0em,align=right},xticklabel style={text width=0em,align=right}}
+\usepgfplotslibrary{fillbetween}
+\usepgfplotslibrary{units}
+
+\newcommand{\heart}{\ensuremath\varheartsuit}
+
+\usepackage{bm}
+\usepackage{siunitx}
+\usepackage{booktabs}
+
+% Similar to the beamer KU template (comment/uncomment)
+\usepackage{wasysym,amsbsy,fourier,mathrsfs}
+
+\usepackage[margin=0cm,nohead]{geometry}
+\usepackage{ifthen}
+\usepackage[customcolors,shade]{hf-tikz}
+
+\usepackage{epstopdf}
+
+% % Colorbrewer for tikz
+\usetikzlibrary{colorbrewer}
+\usepgfplotslibrary{colorbrewer}
+
+%\usetikzlibrary{decorations.pathreplacing,decorations.pathmorphing,decorations.text,
+%decorations.mypathmorphing,decorations.markings}
+\usetikzlibrary{positioning}
+\usetikzlibrary{patterns}
+% \usetikzlibrary{snakes}
+\usetikzlibrary{shapes,arrows}
+\usetikzlibrary{plotmarks,dsp,chains,shapes.geometric}
+\usetikzlibrary{hobby,backgrounds,trees,shapes.callouts}
+\usetikzlibrary{calc,fit}
+\usetikzlibrary{snakes}
+\usetikzlibrary{arrows.meta}
+\usetikzlibrary{pgfplots.groupplots}
+\usetikzlibrary{spy}
+\usetikzlibrary{mindmap}
+\usetikzlibrary{matrix}
+\usetikzlibrary{patterns,angles,quotes}
+\usetikzlibrary{intersections}
+\usetikzlibrary{fadings}
+\usetikzlibrary{shadings}
+\usepackage{tikzsymbols}
+%\usepackage{fixltx2e}
+\usepackage{multirow}
+\usepackage{pgfplotstable}
+\usepackage{etoolbox} %turn off MS6
+\newbool{hideDATA}
+
+\input{common_files/myTikzStyles}
+\input{common_files/myTikzAudioSymbols}
+\input{common_files/myColors}
+\input{common_files/myColormap}
+\input{common_files/myFigureDimensions}
+\input{common_files/mySignalMacros}
+\input{common_files/myTikzIcons}
+%\input{common_files/mypreambles} Still to check
+
+\graphicspath{{./mina/}{./Implants_reports/}{./Spinoff/}}
+
+\usepackage[graphics,active,tightpage]{preview}
+\setlength\PreviewBorder{2mm}
+\PreviewEnvironment{tikzpicture}
+
+\begin{document}
+% -*- root: ./main_tikz.tex -*-
+\begin{tikzpicture}[scale=0.5]
+%/*
+\pgfplotsset{% General options
+	%scale only axis,
+	xmin=0, xmax=5,
+    axis line style = thick,
+    every tick/.style={thick},
+    every tick/.style={thick},
+%	ylabel shift={-1.em},
+	yticklabel style={text width=1.0em,align=center},
+    xticklabel style={text width=2.0em,align=center},
+	}	
+\begin{groupplot}[ 
+    group style={
+	group name=myplot,
+	group size=3 by 2,
+    horizontal sep=10pt,
+	vertical sep=10pt
+    },
+]
+% -------------------------------------------------------------------------------------------------------------------
+% Plot [1, 1]
+%-----------
+\nextgroupplot[
+	width=\fwidthspec*0.4,
+	height=\fheightspec*0.5,
+    hide axis
+    ]
+%-----------
+% Plot [1, 2]
+%-----------
+\nextgroupplot[
+	width=\fwidthspec*0.4,
+	height=\fheightspec*0.5,
+    hide axis
+    ]	
+%-----------
+% Plot [1, 3]
+%-----------
+\nextgroupplot[
+	width=\fwidthspec,
+	height=\fheightspec*0.5,
+    axis on top,
+    ymin=-0.1, ymax=0.1,
+	xticklabels={},
+    yticklabel style={text width=2.0em,align=right},
+    scaled y ticks=base 10:1,
+    tick scale binop={\times},
+%    /pgf/number format/precision=1,
+    ytick={-0.5e-1,0,0.5e-1},
+    yticklabel pos=right,
+    ylabel = {Amplitude [-]},
+    ylabel style={yshift=-2pt},
+	% title={$u(t)$ -- Closed-loop case}
+]
+	% LS
+    \addplot [forget plot] graphics [xmin=-0.00352609308885755,xmax=5.00352609308886,ymin=-0.150226860254083,ymax=0.100226860254083] {gfx/tikz/ex_ls-1.png};
+%-----------
+% Plot [2, 1]
+%-----------
+\nextgroupplot[
+	width=\fwidthspec*0.4,
+	height=\fheightspec*1,
+    %scale only axis,
+    separate axis lines,
+    xmin=-3, xmax=9,
+    xticklabels={$$,$0$,$-5$},
+	ytick={0,1000,...,8000},
+	yticklabels={$0$,$1$,$2$,$3$,$4$,$5$,$6$,$7$,$8$},    
+    ylabel={Frequency},  y unit=\si{\kilo\hertz},
+    ymin=0, ymax=4000,
+    xlabel={Magnitude},  x unit=\si{\deci\bel},
+    title={$|G(\omega)F(\omega)|$}
+]
+\addplot [color=KUdb,solid,line width=1.5pt,forget plot]
+  table{gfx/tikz/ex_howling_LTmagphase-1.tsv};
+\addplot [color=black,dashed,line width=1.0pt,forget plot]
+  table{gfx/tikz/ex_howling_LTmagphase-2.tsv};
+\addplot [color=green!60!black,densely dashed,line width=1.0pt,forget plot]
+  table{gfx/tikz/ex_howling_LTmagphase-3.tsv};
+\addplot [color=KUor,densely dashed,line width=1.0pt,forget plot]
+  table{gfx/tikz/ex_howling_LTmagphase-3a.tsv};  
+\addplot [color=green!60!black,densely dashed,line width=1.0pt,forget plot]
+  table{gfx/tikz/ex_howling_LTmagphase-4.tsv};
+\addplot [color=red,densely dashed,line width=1.0pt,forget plot]
+  table{gfx/tikz/ex_howling_LTmagphase-5.tsv};
+%-----------
+% Plot [2, 2]
+%-----------
+\nextgroupplot[
+	width=\fwidthspec*0.4,
+	height=\fheightspec*1,
+    %scale only axis,
+    separate axis lines,
+    xmin=-4, xmax=4,
+    xtick={-3.14,0,3.14},
+    xticklabels={$\pi$,$0$,$-\pi$},
+	ytick={0,1000,...,8000},
+	yticklabels={},    
+    %ylabel={Frequency},  y unit=\si{\kilo\hertz},
+    ymin=0, ymax=4000,
+    xlabel={Phase},  x unit=\si{\radian},
+    title={$\angle{G(\omega)F(\omega)}$}
+]
+\addplot [color=KUdb,solid,line width=1.5pt,forget plot]
+  table{gfx/tikz/ex_howling_LTmagphase-6.tsv};
+\addplot [color=black,dashed,line width=1.0pt,forget plot]
+  table{gfx/tikz/ex_howling_LTmagphase-7.tsv};
+\addplot [color=green!60!black,densely dashed,line width=1.0pt,forget plot]
+  table{gfx/tikz/ex_howling_LTmagphase-8.tsv};
+\addplot [color=KUor,densely dashed,line width=1.0pt,forget plot]
+  table{gfx/tikz/ex_howling_LTmagphase-8a.tsv};  
+\addplot [color=green!60!black,densely dashed,line width=1.0pt,forget plot]
+  table{gfx/tikz/ex_howling_LTmagphase-9.tsv};
+\addplot [color=red,densely dashed,line width=1.0pt,forget plot]
+  table{gfx/tikz/ex_howling_LTmagphase-10.tsv};
+% Plot [3, 2]
+%-----------
+\nextgroupplot[
+	width=\fwidthspec,
+	height=\fheightspec*1.0,
+    ymin=0,	ymax=4000,
+	ytick={0,1000,...,8000},
+	yticklabels={},
+    xtick align=outside,
+    ytick align=outside,
+	xminorticks=true,
+	xminorticks=true, yminorticks=true,
+	xmajorgrids,  xminorgrids,
+	ymajorgrids,  yminorgrids,
+    %colormap={mymap}{\mycmap},
+	colorbar,
+    colorbar style={
+        ylabel=PSD,
+        ylabel style={yshift=-2pt},
+        y unit= \si{\dB/\hertz},
+        xshift=-10pt,
+        ytick align=inside,
+        axis line style = thick,
+        ytick={-60,-50,...,0},
+        yticklabel style={
+            text width=1.5em,
+            align=right,
+        }
+    },
+	point meta min=-60,
+	point meta max=0,	
+	xlabel={Time}, x unit=\si{\second},
+	xtick={0,1,2,3,4,5},
+]
+	% LS spectrogram
+    \addplot [forget plot] graphics [xmin=-0.000501793900737493,xmax=5.03550179390074,ymin=-7.82013685239492,ymax=16007.8201368524] {gfx/tikz/ex_howling_spectrogram-1.png};
+\end{groupplot}
+%*/
+\end{tikzpicture}%
+
+
+
+\end{document}

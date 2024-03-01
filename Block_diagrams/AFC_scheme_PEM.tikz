@@ -1,0 +1,172 @@
+% -*- root: ../main_tikz.tex -*-
+%
+
+\usetikzlibrary{dsp,chains,calc,shapes.geometric}
+% Block diagram for adaptive feedback cancellation:
+% PEM
+
+\tikzset{
+Speaker/.pic={
+    \filldraw[fill=gray!40,pic actions] 
+    (-15pt,0) -- 
+      coordinate[midway] (-front) 
+    (15pt,0) -- 
+    ++([shift={(-6pt,8pt)}]0pt,0pt) coordinate (aux1) -- 
+    ++(-18pt,0) coordinate (aux2) 
+    -- cycle 
+    (aux1) -- ++(0,6pt) -- coordinate[midway] (-back) ++(-18pt,0) -- (aux2);
+  }
+}
+
+\begin{tikzpicture}
+%%%%%%%%%%%%%%%%%%%%%%%
+% Blocks and nodes
+%%%%%%%%%%%%%%%%%%%%%%%
+
+%------- Source signal ---------
+\node[dspnodeopen,dsp/label=below] 
+  (noise_source) {}; 
+\node[dspfilter,left=of noise_source,left=0.5cm]
+  (source_model) {$H$};
+\node[below=of source_model,below=0.2cm] 
+  (source_signal) {source signal model}; 
+  
+%------- Mic symbol ---------
+\node[left=of source_model,fill=gray!40,circle,minimum size=0.35cm,draw,left=0.8cm] 
+  (mic) {};
+\draw ([yshift=6pt]mic.east) -- ([yshift=-6pt]mic.east);  
+
+%------- Adder --------- 
+\node[dspadder,left=of mic,left=1.0cm,label={above ,right=0.2cm:$-$},label={right,above=-0.2cm:$+$}] 
+  (add) {};
+  
+%------- Forward path ----------------  
+\node[coordinate,left=of add,left=3.125cm]
+  (fp1) {};
+\node[dspfilter,above=of fp1,above=1.25cm,minimum height=1.5cm,minimum width=1cm]
+  (gain) {$G$};
+\node[coordinate,above=of gain,above=1.25cm]
+  (fp2) {};
+  
+%------- Decorr. of u ----------------
+\node[dspnodefull,right=of fp2,right=1.475cm]
+  (dec_node_u) {};
+\node[dspfilter,right=of gain,right=.5cm,minimum height=1.5cm,minimum width=1cm]
+  (dec_filt_u) {$\hat{H}^{-1}$}; 
+\node[coordinate,below=of dec_filt_u,below=0.2cm]
+  (dec_coord_u_1) {};  
+\node[coordinate,right=of dec_coord_u_1,right=0.65cm]
+  (dec_coord_u_2) {};    
+\node[coordinate,below=of dec_coord_u_2,below=0.95cm]
+  (dec_coord_u_2a) {};  
+\node[coordinate,below=of dec_coord_u_2a,below=0.2cm]
+  (dec_coord_u_2b) {};    
+\node[coordinate,below=of dec_coord_u_2,below=1.95cm]
+  (dec_coord_u_3) {};  
+\node[coordinate,left=of dec_coord_u_3,left=1cm]
+  (dec_coord_u_4) {};    
+  
+
+%------- Adaptive filter 2 (decorr path) --------- 
+\node[dspfilter,below=of dec_coord_u_4,below=0.3cm,minimum height=1.5cm,minimum width=1cm] 
+  (adfilt2) {$\hat{F}$};
+
+%------- Adder decorr path--------- 
+\node[dspadder,below=of adfilt2,below=0.5cm,label={above ,right=0.2cm:$-$},label={right,above=-0.2cm:$+$}] 
+  (add_dec) {};  
+  
+%------- Decorr. of y ----------------
+\node[dspnodefull,left=of mic,left=0.5cm]
+  (dec_node_y) {};
+\node[dspfilter,below=of dec_node_y,below=1.15cm,minimum height=1.5cm,minimum width=1cm,label={[align=left,xshift=1.75cm,yshift=-1.2cm,]decorrelating\\prefilter}]
+  (dec_filt_y) {$\hat{H}^{-1}$}; 
+\node[coordinate,below=of dec_filt_y,below=0.7cm]
+  (dec_coord_y_1) {};    
+
+%------- Adaptive filter 1 --------- 
+\node[dspnodefull,right=of fp2,right=3.275cm]
+  (adnode) {$u(t)$};
+\node[dspfilter,right=of gain,right=2.3cm,minimum height=1.5cm,minimum width=1cm] 
+  (adfilt1) {$\hat{F}$};
+  
+%------- Connection between adfilt2 and adfilt1 --------- 
+\node[coordinate,right=of adfilt2,right=0.7cm]
+(adfilt_conn_1) {};
+\node[coordinate,above=of adfilt_conn_1,above=1.865cm]
+  (adfilt_conn_1a) {};  
+\node[coordinate,below=of adfilt_conn_1a,above=0.2cm]
+  (adfilt_conn_1b) {};    
+\node[coordinate,above=of adfilt_conn_1,above=3.95cm]
+(adfilt_conn_2) {};
+
+%------- Adaptive filter 2 arrow --------- 
+\node[coordinate,left=of add_dec,left=0.5cm]
+(adfilt2_upd_1) {};
+\node[coordinate,above=of adfilt2_upd_1,above=1.0cm]
+(adfilt2_upd_2) {};
+\coordinate (adfilt2_upd_3) at ([yshift=-4pt]adfilt2.center);
+
+%------- LS symbol ---------
+\coordinate (lscoord) at ($(fp2)+(4.7525,0)$);
+%\node[draw,right= 4.525cm of fp2,fill=gray,trapezium,shape border rotate=90,shape border uses incircle]
+%  (ls) {};
+%\draw[fill=gray] ([yshift=-5pt]ls.west) -- ([yshift=5pt]ls.west) -- ([yshift=5pt,xshift=-2pt]ls.west) -- ([yshift=-5pt,xshift=-2pt]ls.west) -- cycle;
+\pic[rotate=90,scale=0.8] (ls) at (lscoord) {Speaker};
+
+
+
+%------- Real RIR block ---------
+\node[dspfilter,right=of gain,right=4.55cm,minimum height=1.5cm,minimum width=1cm]
+  (feedback) {$F$};
+  
+%--------- Dummy nodes to avoid labels clipping
+\node at (-3,4.5) {};  
+
+%----------------------------------------------------------------------------------------------------------
+%%%%%%%%%%%%%%%%%%%%%%%
+% Connections
+%%%%%%%%%%%%%%%%%%%%%%%
+\draw[dspconn] (noise_source) -- node[midway,below=0.1cm,xshift=0.2cm] {$\myexcsig(t)$} (source_model);
+\draw[dspconn] (source_model) -- node[midway,below=0.1cm,xshift=0.035cm] {$v(t)$} (mic);
+\draw[dspconn] (mic) -- node[midway,below=0.1cm,xshift=0.35cm] {$y(t)$} (add);
+%--------- Forward path (from adder to ls)
+%\draw[dspline] (add) -- node[midway,below=0.1cm,xshift=1.15cm] {$\myerrsig[t |\vect{\hat{f}}(t)]$} (PF);
+\draw[dspline] (add) -- (fp1);
+\draw[dspconn] (fp1) -- node[at start,above=0.05cm,xshift=0.7cm] {$\myerrsig[t |\vect{\hat{f}}(t)]$} (gain);
+\draw[dspline] (gain) -- (fp2);
+\draw[dspline] (fp2) -- (adnode);
+\draw[dspconn] (adnode) -- (ls-back);
+%--------- Adaptive filter 1
+\draw[dspconn] (adnode) -- (adfilt1);
+\draw[dspconn] (adfilt1) -- node[midway,right,yshift=0.15cm] {$\hat{y}[t |\vect{\hat{f}}(t)]$} (add);
+\draw[dspconn] (ls-front) to[out=-10,in=90] (feedback);
+%--------- Decorrelation of u to adder dec
+\draw[dspconn] (dec_node_u) -- (dec_filt_u);
+\draw[dspline] (dec_filt_u) -- (dec_coord_u_1);
+\draw[dspline] (dec_coord_u_1) -- (dec_coord_u_2);
+\draw[dspline] (dec_coord_u_2) -- (dec_coord_u_2a);
+\draw[dspline] ([xshift=-0.36pt]dec_coord_u_2b) arc (-90:90:0.1cm); % Using arc
+\draw[dspline] (dec_coord_u_2b) -- (dec_coord_u_3);
+\draw[dspline] (dec_coord_u_3) -- (dec_coord_u_4);
+\draw[dspconn] (dec_coord_u_4) -- node[midway,left,yshift=0.15cm] {$\mypref{u}[t,\vect{\hat{h}}(t)]$} (adfilt2);
+\draw[dspconn] (adfilt2) -- (add_dec);
+%--------- Decorrelation of y to adder dec
+\draw[dspconn] (dec_node_y) -- (dec_filt_y);
+\draw[dspline] (dec_filt_y) -- node[midway,right,yshift=0.0cm] {$\mypref{y}[t,\vect{\hat{h}}(t)]$} (dec_coord_y_1);
+\draw[dspconn] (dec_coord_y_1) -- (add_dec);
+%--------- Connection between adfilt2 and adfilt1
+\draw[dspline] (adfilt2) -- (adfilt_conn_1);
+\draw[dspline] (adfilt_conn_1) -- node[at start,right,yshift=0.15cm] {$\vect{\hat{f}}(t)$} (adfilt_conn_1a);
+\draw[dspline] ([xshift=-0.36pt]adfilt_conn_1a) arc (-90:90:0.1cm); % Using arc
+%\draw[dspline] (adfilt_conn_1a) to[out=0,in=0] (adfilt_conn_1b); % Using only a line
+\draw[dspline] (adfilt_conn_1b) -- (adfilt_conn_2);
+\draw[dspconn] (adfilt_conn_2) -- (adfilt1);
+%--------- Adaptive filter 2 update
+\draw[dspline,dashed] (add_dec) -- node[midway,below=0.2,xshift=-0.075cm] {$\myprederrsigTD [t,\vect{\hat{h}}(t),\vect{\hat{f}}(t)]$} (adfilt2_upd_1);
+\draw[dspline,dashed] (adfilt2_upd_1) -- (adfilt2_upd_2);
+\draw[dspconn,dashed] (adfilt2_upd_2) -- ( $ (adfilt2_upd_2)!50pt!(adfilt2_upd_3) $ );
+%------- Real RIR
+\draw[dspconn] (feedback) to[out=-90,in=40] node[midway,above=-0.06cm,xshift=0.65cm] {$x(t)$} ([yshift=3pt]mic.east);
+
+
+\end{tikzpicture}

@@ -1,0 +1,24 @@
+% -*- root: ./main_tikz.tex -*-
+%
+\begin{tikzpicture}
+\begin{axis}[
+	x tick label style={
+		/pgf/number format/1000 sep=},
+	ylabel=Year,
+		ylabel style={align=center}, 
+	yticklabel style={text width=2em},
+	xticklabel style={align=center},
+	enlargelimits=0.05,
+	legend style={at={(0.5,-0.1)},
+	anchor=north,legend columns=-1},
+	ybar interval=0.7,
+]
+\addplot 
+	coordinates {(2012,408184) (2011,408348)
+		 (2010,414870) (2009,412156) (2008,415 838)};
+\addplot 
+	coordinates {(2012,388950) (2011,393007) 
+		(2010,398449) (2009,395972) (2008,398866)};
+\legend{Men,Women}
+\end{axis}
+\end{tikzpicture}

@@ -1,0 +1,9 @@
+PWD /Users/giuliano/Dropbox/Doctorate/Docs/Presentations/2019_11_22_Group_meeting_Tikz/Examples_TikZEdt
+INPUT /usr/local/texlive/2018/texmf.cnf
+INPUT /usr/local/texlive/2018/texmf-dist/web2c/texmf.cnf
+INPUT /usr/local/texlive/2018/texmf-var/web2c/pdftex/pdflatex.fmt
+INPUT /Users/giuliano/Dropbox/Doctorate/Docs/Presentations/2019_11_22_Group_meeting_Tikz/Examples_TikZEdt/ex_ls_sig_spectr_loopgainphase.ptex
+OUTPUT /Users/giuliano/Dropbox/Doctorate/Docs/Presentations/2019_11_22_Group_meeting_Tikz/Examples_TikZEdt/ex_ls_sig_spectr_loopgainphase.log
+INPUT /Users/giuliano/Dropbox/Doctorate/Docs/Presentations/2019_11_22_Group_meeting_Tikz/Examples_TikZEdt/ex_ls_sig_spectr_loopgainphase.aux
+INPUT /Users/giuliano/Dropbox/Doctorate/Docs/Presentations/2019_11_22_Group_meeting_Tikz/Examples_TikZEdt/ex_ls_sig_spectr_loopgainphase.aux
+OUTPUT /Users/giuliano/Dropbox/Doctorate/Docs/Presentations/2019_11_22_Group_meeting_Tikz/Examples_TikZEdt/ex_ls_sig_spectr_loopgainphase.aux

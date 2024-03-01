@@ -1,0 +1,14 @@
+% -*- root: ./main_tikz.tex -*-
+%
+% Preamble: \pgfplotsset{width=7cm,compat=newest}
+\begin{tikzpicture}
+	\begin{axis}[
+		colormap/hot, %hot, bluered, blackwhite
+		xlabel={the x coordinate},
+		ylabel={the y coordinate},
+		zlabel={the z coordinate},
+	]
+		\addplot3+[mesh,scatter,samples=10,domain=0:1]
+		{x*(1-x)*y*(1-y)};
+	\end{axis}
+\end{tikzpicture}
