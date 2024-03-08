@@ -16,10 +16,8 @@ And set them up as follows:
 1. Install ST3
 2. Install the ST3 package `Latexing` from the ST3 Package control (invoke by pressing `Command`+`Shift`+`B`)
 3. Install the ST3 package `TikZ` from the ST3 Package control (invoke by pressing `Command`+`Shift`+`B`)
-4. Add the lines 
-```    "tikz": true,
-    "tikz_create_pdf": true``` 
-    to `Sublime Text/Settings.../Package Settings/LaTeXing/Settings - User `
+4. Add the lines ```"tikz": true, "tikz_create_pdf": true``` 
+to `Sublime Text/Settings.../Package Settings/LaTeXing/Settings - User `
 
 ## Setup Skim
 1. Install Skim
